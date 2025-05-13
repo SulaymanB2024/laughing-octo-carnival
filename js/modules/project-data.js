@@ -6,11 +6,112 @@ export class ProjectData {
     constructor() {
         this.projects = [];
         this.projectClickListeners = [];
+        this.projectModalListeners = [];
         this.activeFilters = {
             dateRange: { start: 0, end: 9999 },
             categories: new Set(),
             skills: new Set(),
             status: new Set()
+        };
+        
+        // Project detailed information from the original HTML
+        this.projectDetails = {
+            bittensor: {
+                title: "VC-Backed Bittensor Project (Details)",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Bittensor+Protocol+Deep+Dive",
+                description: `
+                    <p>This project involved architecting a novel solution on the <strong>Bittensor protocol</strong>, a decentralized machine learning network. As a co-founder, my responsibilities were multifaceted, spanning from initial concept and whitepaper development to technical architecture and grant acquisition.</p>
+                    <p><strong>Key Achievements & Responsibilities:</strong></p>
+                    <ul>
+                        <li>Secured a <strong>$10,000 grant from DormDAO</strong> through a competitive pitching process, validating the project's potential and our team's vision.</li>
+                        <li>Led the design of the project's governance model, ensuring fair participation and decentralized decision-making processes.</li>
+                        <li>Defined core technical requirements and collaborated with development resources to translate these into a functional PoC (Proof of Concept).</li>
+                        <li>Conducted extensive research into subnets, tokenomics, and incentive mechanisms within the Bittensor ecosystem to optimize our project's integration and viability.</li>
+                        <li>Due to the sensitive nature of ongoing development and intellectual property, further specific details are covered under a Non-Disclosure Agreement.</li>
+                    </ul>
+                    <p><em>Technologies involved: Blockchain, Bittensor Protocol, Python, Decentralized Systems, Governance Models.</em></p>
+                `
+            },
+            cryptoDD: {
+                title: "Crypto Due Diligence Case Studies",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=In-Depth+Crypto+Analysis",
+                description: `
+                    <p>As an Investment Team Analyst at Texas Blockchain, I was responsible for conducting thorough due diligence on a variety of cryptoasset projects. This involved a multi-faceted approach to evaluate potential investments for a $120K AUM student-managed portfolio.</p>
+                    <p><strong>Process & Deliverables:</strong></p>
+                    <ul>
+                        <li>Analyzed over 10 distinct cryptoasset projects, ranging from Layer 1 protocols to DeFi applications and NFT ecosystems.</li>
+                        <li>Developed comprehensive risk assessment frameworks, considering technical vulnerabilities, market risks, regulatory concerns, and team capabilities.</li>
+                        <li>Created detailed valuation summaries using various models, including comparative analysis, network value to transactions (NVT) ratios, and discounted cash flow (DCF) where applicable.</li>
+                        <li>Prepared and delivered investment pitches, successfully allocating between $5,000 - $8,000 per selected idea.</li>
+                        <li>Focused on identifying projects with strong fundamentals, innovative technology, and sustainable tokenomics.</li>
+                    </ul>
+                    <p><em>Example areas of analysis: Token utility, smart contract audits, community engagement, competitive landscape, roadmap viability, and macroeconomic factors influencing the crypto space.</em></p>
+                `
+            },
+            imcTrading: {
+                title: "IMC Prosperity Trading Challenge: Strategy Insights",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Algorithmic+Trading+Simulation",
+                description: `
+                    <p>Participated in the IMC Prosperity Global Trading Challenge, a highly competitive event simulating real-world market dynamics. This involved developing and testing both algorithmic and discretionary trading strategies across multiple rounds.</p>
+                    <p><strong>Approach & Learnings:</strong></p>
+                    <ul>
+                        <li>Focused on quantitative strategies, including statistical arbitrage, momentum trading, and mean-reversion techniques.</li>
+                        <li>Utilized simulated market data to backtest strategies and optimize parameters for risk management and profitability.</li>
+                        <li>Developed algorithms to automate trade execution based on predefined signals and market conditions.</li>
+                        <li>Gained practical experience in market microstructure, order book dynamics, and the psychological aspects of trading under pressure.</li>
+                        <li>The challenge emphasized rapid decision-making, adaptability to changing market scenarios, and rigorous analytical thinking.</li>
+                    </ul>
+                    <p><em>This experience honed my skills in data analysis, algorithmic design, and risk assessment in a fast-paced trading environment.</em></p>
+                `
+            },
+            stablecoinResearch: {
+                title: "Messari Stablecoin Research: Market Analysis",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Stablecoin+Ecosystem+Study",
+                description: `
+                    <p>As an analyst for Messari, I conducted in-depth research into the evolving landscape of stablecoins. This involved examining various stablecoin mechanisms, market trends, and their impact on the broader digital asset ecosystem.</p>
+                    <p><strong>Key Research Areas:</strong></p>
+                    <ul>
+                        <li>Analyzed different types of stablecoins: fiat-collateralized, crypto-collateralized, and algorithmic.</li>
+                        <li>Investigated peg stability mechanisms, risk factors (e.g., de-pegging events, regulatory scrutiny), and adoption metrics across multiple assets.</li>
+                        <li>Automated data-monitoring workflows using Python scripts to track key stablecoin metrics such as market capitalization, trading volume, and on-chain velocity.</li>
+                        <li>Contributed to reports and analyses on stablecoin market trends, highlighting opportunities and challenges for different protocols and use cases.</li>
+                        <li>Explored the role of stablecoins in DeFi, cross-border payments, and as a store of value in volatile markets.</li>
+                    </ul>
+                    <p><em>This research provided valuable insights into the critical role stablecoins play in the digital economy and the complexities of maintaining their stability and utility.</em></p>
+                `
+            },
+            creModeling: {
+                title: "Commercial Real Estate Analysis: Modeling Samples",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=CRE+Financial+Forecasting",
+                description: `
+                    <p>During my internship at Investors Alliance, Inc., I was deeply involved in the financial analysis of commercial real estate properties. This included building sophisticated financial models to support investment decisions.</p>
+                    <p><strong>Core Responsibilities & Outputs:</strong></p>
+                    <ul>
+                        <li>Developed detailed pro forma financial models for various property types (e.g., office, retail, multifamily).</li>
+                        <li>Created comprehensive cash-flow forecasts, incorporating assumptions for rental income, operating expenses, capital expenditures, and debt service.</li>
+                        <li>Performed sensitivity analysis to assess the impact of different market scenarios on investment returns (IRR, NPV, equity multiple).</li>
+                        <li>Contributed to the rebuilding of the company's internal investment database, focusing on data integrity and efficient reporting. This involved redesigning the storage schema and standardizing data input processes.</li>
+                        <li>Assisted in the preparation of investment memorandums and presentations for potential investors and internal review.</li>
+                    </ul>
+                    <p><em>Tools used: Advanced Microsoft Excel, ARGUS (exposure), SQL (for database interaction). This experience provided a strong foundation in real estate valuation and financial due diligence.</em></p>
+                `
+            },
+            energyTrading: {
+                title: "Energy Commodity Trading Analysis: Market Reports",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Energy+Market+Dynamics",
+                description: `
+                    <p>As a cohort member at UTEXAS Energy Trading, I engaged in the analysis of energy commodity markets, including electricity, natural gas, and renewables. The program focused on identifying trading opportunities through fundamental and technical analysis.</p>
+                    <p><strong>Activities & Focus Areas:</strong></p>
+                    <ul>
+                        <li>Conducted market research on supply and demand dynamics, weather patterns, geopolitical events, and regulatory changes affecting energy prices.</li>
+                        <li>Collaborated with team members to develop and refine trading models and strategies.</li>
+                        <li>Analyzed historical price data and volatility to identify potential arbitrage opportunities and trends.</li>
+                        <li>Prepared and presented market reports, summarizing key findings and potential trading ideas.</li>
+                        <li>Gained exposure to risk management techniques specific to energy markets and portfolio optimization strategies.</li>
+                    </ul>
+                    <p><em>This program provided a comprehensive overview of energy trading operations and the analytical skills required to navigate these complex markets.</em></p>
+                `
+            }
         };
     }
     
@@ -122,7 +223,9 @@ export class ProjectData {
             if (!detailsBtn) return;
             
             detailsBtn.addEventListener('click', () => {
+                // Both open the panel and trigger modal
                 this.notifyProjectClick(project.id);
+                this.notifyModalOpen(project);
             });
         });
     }
@@ -281,6 +384,24 @@ export class ProjectData {
         });
     }
     
+    /**
+     * Register a function to be called when a modal should be opened
+     * @param {Function} callback Function to call when a project is clicked
+     */
+    onModalOpen(callback) {
+        if (typeof callback === 'function') {
+            this.projectModalListeners.push(callback);
+        }
+    }
+    
+    /**
+     * Notify all registered listeners about a modal open request
+     * @param {Object} project The project data
+     */
+    notifyModalOpen(project) {
+        this.projectModalListeners.forEach(callback => callback(project));
+    }
+
     /**
      * Get a project by ID
      * @param {string} id - The project ID to find

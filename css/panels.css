@@ -1,31 +1,61 @@
-/* Sliding context panels styles */
+/* Sliding context panels with enhanced styling */
+
+:root {
+    /* Extended theme variables */
+    --panel-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+    --panel-header-bg: rgba(25, 31, 39, 0.95);
+    --panel-radius: 0;
+    --panel-transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    --panel-scroll-thumb: #455164;
+    --panel-scroll-track: rgba(0, 0, 0, 0.2);
+}
 
 .context-panel {
     position: fixed;
     height: 100vh;
     width: var(--panel-width);
     background-color: #191f27;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    background-image: linear-gradient(180deg, #1e252e 0%, #151b22 100%);
+    box-shadow: var(--panel-shadow);
     z-index: 1500;
-    transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform var(--panel-transition);
     overflow-y: auto;
     top: 0;
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--theme-border-dark);
     padding-top: var(--header-height);
+    scrollbar-width: thin;
+    scrollbar-color: var(--panel-scroll-thumb) var(--panel-scroll-track);
+}
+
+.context-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.context-panel::-webkit-scrollbar-track {
+    background: var(--panel-scroll-track);
+}
+
+.context-panel::-webkit-scrollbar-thumb {
+    background: var(--panel-scroll-thumb);
+    border-radius: 3px;
 }
 
 .panel-left {
     left: 0;
     transform: translateX(-100%);
     border-right: 1px solid var(--theme-border-dark);
+    border-top-right-radius: var(--panel-radius);
+    border-bottom-right-radius: var(--panel-radius);
 }
 
 .panel-right {
     right: 0;
     transform: translateX(100%);
     border-left: 1px solid var(--theme-border-dark);
+    border-top-left-radius: var(--panel-radius);
+    border-bottom-left-radius: var(--panel-radius);
 }
 
 .panel-open {
@@ -38,31 +68,50 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background-color: var(--panel-header-bg);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .panel-title {
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--theme-light);
+    letter-spacing: -0.01em;
 }
 
 .panel-close {
     cursor: pointer;
     color: var(--theme-text-medium);
-    transition: color 0.2s;
+    transition: all 0.2s;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
 }
 
 .panel-close:hover {
     color: var(--theme-light);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .panel-content {
-    padding: 16px;
+    padding: 20px;
     flex: 1;
 }
 
 .panel-section {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .panel-section-title {
@@ -70,8 +119,19 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--theme-text-medium);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.panel-section-title::after {
+    content: "";
+    flex-grow: 1;
+    height: 1px;
+    background: var(--theme-border-dark);
+    margin-left: 8px;
 }
 
 .panel-list {
@@ -81,8 +141,13 @@
 }
 
 .panel-list-item {
-    padding: 8px 0;
+    padding: 10px 0;
     border-bottom: 1px solid var(--theme-border-dark);
+    transition: background-color 0.15s;
+}
+
+.panel-list-item:hover {
+    background-color: rgba(255, 255, 255, 0.03);
 }
 
 .panel-list-item:last-child {
@@ -90,13 +155,13 @@
 }
 
 .filter-group {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .filter-title {
     font-size: 0.8rem;
     color: var(--theme-text-medium);
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .filter-chips {
@@ -106,29 +171,39 @@
 }
 
 .filter-chip {
-    background-color: var(--theme-border-dark);
+    background-color: rgba(255, 255, 255, 0.08);
     color: var(--theme-text-medium);
-    padding: 4px 12px;
-    border-radius: 16px;
+    padding: 6px 14px;
+    border-radius: 20px;
     font-size: 0.75rem;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition: all 0.2s;
+    border: 1px solid var(--theme-border-dark);
 }
 
 .filter-chip:hover {
-    background-color: #2a343f;
+    background-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
 }
 
 .filter-chip.active {
     background-color: var(--theme-accent-primary);
     color: var(--theme-dark);
+    box-shadow: 0 2px 8px rgba(var(--theme-accent-primary-rgb), 0.4);
+    border-color: transparent;
 }
 
 .metadata-item {
     display: flex;
     justify-content: space-between;
     font-size: 0.85rem;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.metadata-item:last-child {
+    border-bottom: none;
 }
 
 .metadata-label {
@@ -137,6 +212,7 @@
 
 .metadata-value {
     color: var(--theme-light);
+    font-weight: 500;
 }
 
 .content-backdrop {
@@ -145,11 +221,12 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
     z-index: 1400;
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--transition-speed);
+    transition: all var(--panel-transition);
 }
 
 .backdrop-visible {
@@ -164,7 +241,7 @@ body.panel-active {
 /* Make main content shift when panel is open for larger screens */
 @media (min-width: 1024px) {
     .main-content {
-        transition: margin var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+        transition: margin var(--panel-transition);
     }
     
     body.panel-left-active .main-content {
@@ -173,5 +250,12 @@ body.panel-active {
     
     body.panel-right-active .main-content {
         margin-right: var(--panel-width);
+    }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .context-panel {
+        width: min(var(--panel-width), 85vw);
     }
 }
