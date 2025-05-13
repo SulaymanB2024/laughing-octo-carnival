@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sulayman Bowles - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Modularized CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/panels.css">
+    <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="css/modal.css">
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--theme-dark);
+            color: var(--theme-light);
+            overflow-x: hidden;
+        }
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--theme-dark);
+        }
+        #network-visualization {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.8;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-title {
+            font-size: 4.25rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: var(--theme-light);
+            text-shadow: 0 0 15px rgba(216, 216, 216, 0.1);
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--theme-text-medium);
+            margin-top: 1.25rem;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        .section {
+            padding: 4.5rem 1rem;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+        .section-title-container {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--theme-light);
+            display: inline-block;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--theme-border-light);
+        }
+        .card {
+            background-color: #24282b;
+            border-radius: 0.375rem;
+            padding: 1.5rem;
+            border: 1px solid var(--theme-border-dark);
+            box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s ease, box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .card:hover {
+            transform: translateY(-8px); /* Increased lift */
+            border-color: var(--theme-accent-bg); /* More prominent border on hover */
+            box-shadow: 0 12px 20px -3px rgba(219, 219, 219, 0.1); /* More noticeable shadow */
+        }
+        .card h3 {
+            color: var(--theme-light);
+        }
+        .card p {
+            color: var(--theme-text-medium);
+        }
+
+        /* Enhanced Skills Section Styles */
+        .skills-category {
+            margin-bottom: 2.5rem;
+        }
+        .skills-category-title {
+            font-size: 1.25rem; /* Slightly smaller than section title */
+            font-weight: 600;
+            color: var(--theme-light);
+            margin-bottom: 1rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid var(--theme-border-dark);
+            text-align: left; /* Align category titles to the left */
+        }
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem; /* Gap between skill badges */
+            justify-content: flex-start; /* Align badges to the left */
+        }
+        .skill-badge {
+            background-color: #2a2e32;
+            color: var(--theme-light);
+            padding: 0.4rem 0.9rem; /* Adjusted padding */
+            border-radius: 0.25rem;
+            font-weight: 500;
+            /* margin: 0.25rem; Removed individual margin, using gap in .skills-list */
+            border: 1px solid var(--theme-border-light);
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+        .skill-badge:hover {
+            background-color: var(--theme-border-light);
+            color: var(--theme-dark);
+            transform: scale(1.05);
+        }
+        /* End Enhanced Skills Section Styles */
+
+        nav {
+            background-color: rgba(30, 33, 36, 0.85);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease;
+            border-bottom: 1px solid var(--theme-border-dark);
+        }
+        nav a {
+            transition: color 0.3s ease;
+            color: var(--theme-text-medium);
+            font-weight: 500;
+        }
+        nav a:hover {
+            color: var(--theme-light);
+        }
+        .nav-link-indicator {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            height: 2px;
+            background-color: var(--theme-light);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+        .btn-primary {
+            background-color: var(--theme-border-light);
+            color: var(--theme-dark);
+            padding: 0.7rem 1.5rem; /* Slightly larger padding */
+            border-radius: 0.25rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            display: inline-block;
+            border: 1px solid var(--theme-border-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .btn-primary:hover {
+            background-color: var(--theme-accent-bg);
+            color: var(--theme-accent-text);
+            border-color: var(--theme-accent-bg);
+            transform: translateY(-3px) scale(1.02); /* Added scale effect */
+            box-shadow: 0 4px 15px rgba(219, 219, 219, 0.2); /* Enhanced shadow */
+        }
+        .btn-secondary { /* Also used for project detail buttons */
+            color: var(--theme-text-medium);
+            border: 1px solid var(--theme-border-light);
+            background-color: transparent;
+            border-radius: 0.25rem;
+            padding: 0.6rem 1.2rem; /* Slightly larger padding */
+            font-size: 0.8rem;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer; /* Indicate it's clickable */
+        }
+        .btn-secondary:hover {
+            background-color: rgba(79, 84, 88, 0.25);
+            color: var(--theme-light);
+            border-color: var(--theme-text-medium);
+            transform: translateY(-2px);
+        }
+
+        .nav-resume-btn { /* Specific class for the resume button in nav */
+            background-color: var(--theme-border-dark);
+            color: var(--theme-text-medium);
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+        }
+        .nav-resume-btn:hover {
+            background-color: var(--theme-border-light);
+            color: var(--theme-dark);
+            transform: scale(1.03);
+        }
+
+        .mobile-menu {
+            background-color: #24282b;
+            border-top: 1px solid var(--theme-border-dark);
+        }
+        .mobile-menu a:hover {
+            background-color: var(--theme-border-light);
+            color: var(--theme-dark);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--theme-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--theme-text-darker); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--theme-text-medium); }
+
+        input[type="text"], input[type="email"], textarea {
+            background-color: #2a2e32 !important;
+            color: var(--theme-light) !important;
+            border: 1px solid var(--theme-border-light) !important;
+            border-radius: 0.25rem !important;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+            border-color: var(--theme-accent-bg) !important;
+            box-shadow: 0 0 0 2px rgba(219, 219, 219, 0.2) !important;
+        }
+        ::placeholder { color: var(--theme-text-darker) !important; opacity: 1; }
+        .text-accent { color: var(--theme-light); font-weight: 600; }
+
+        /* Scroll Reveal Animations */
+        .revealable {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1), transform 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .revealable.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal Styles - Enhanced */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 2000; /* Above everything else */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(30, 33, 36, 0.9); /* Dark backdrop with opacity */
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal.active {
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #24282b; /* Same as card background */
+            margin: 10vh auto; /* Adjusted for better positioning */
+            padding: 2rem;
+            border: 1px solid var(--theme-border-light);
+            border-radius: 0.375rem;
+            width: 85%;
+            max-width: 700px; /* Max width for the modal */
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+            color: var(--theme-light);
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+        }
+        .modal.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .modal-close-btn {
+            color: var(--theme-text-medium);
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.75rem;
+            font-weight: bold;
+            line-height: 1;
+            height: 2rem;
+            width: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .modal-close-btn:hover,
+        .modal-close-btn:focus {
+            color: var(--theme-light);
+            background-color: rgba(255,255,255,0.1);
+            text-decoration: none;
+            transform: scale(1.1);
+        }
+        .modal-image-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+            border-radius: 0.375rem;
+            overflow: hidden;
+            border: 1px solid var(--theme-border-dark);
+            background-color: #1c1f22;
+        }
+        .modal-image {
+            width: 100%;
+            max-height: 350px; /* Increased height */
+            object-fit: cover;
+            border-radius: 0.25rem;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+        .modal-image:hover {
+            transform: scale(1.02);
+        }
+        .modal-image-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #1c1f22;
+        }
+        .modal-body {
+            padding-right: 1rem; /* Account for potential scrollbar */
+        }
+        .modal-body h4 {
+            font-size: 1.65rem;
+            color: var(--theme-light);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            letter-spacing: -0.01em;
+        }
+        .modal-body p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--theme-text-medium);
+            margin-bottom: 1.25rem;
+        }
+        .modal-body ul {
+            list-style: none;
+            margin-left: 0.5rem;
+            margin-bottom: 1.25rem;
+            color: var(--theme-text-medium);
+        }
+        .modal-body li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .modal-body li:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--theme-accent-primary);
+        }
+        .modal-body strong {
+            color: var(--theme-light);
+            font-weight: 600;
+        }
+        .modal-body em {
+            color: #a0a0a0;
+            font-style: italic;
+        }
+        .modal-footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+        .modal-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-scrollbar::-webkit-scrollbar-track {
+            background: #1c1f22;
+        }
+        .modal-scrollbar::-webkit-scrollbar-thumb {
+            background-color: var(--theme-border-light);
+            border-radius: 20px;
+        }
+
+        /* Focus trap for accessibility */
+        .modal:focus-within {
+            outline: none;
+        }
+
+        /* Mobile responsiveness adjustments */
+        @media (max-width: 640px) {
+            .modal-content {
+                width: 92%;
+                padding: 1.5rem;
+                margin: 5vh auto;
+            }
+            .modal-image {
+                max-height: 250px;
+            }
+            .modal-body h4 {
+                font-size: 1.4rem;
+            }
+            .modal-close-btn {
+                top: 0.75rem;
+                right: 0.75rem;
+            }
+        }
+
+        /* === Sliding Context Panels === */
+        .context-panel {
+            position: fixed;
+            height: 100vh;
+            width: var(--panel-width);
+            background-color: #191f27;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            transition: transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--theme-border-dark);
+            padding-top: var(--header-height);
+        }
+        
+        .panel-left {
+            left: 0;
+            transform: translateX(-100%);
+            border-right: 1px solid var(--theme-border-dark);
+        }
+        
+        .panel-right {
+            right: 0;
+            transform: translateX(100%);
+            border-left: 1px solid var(--theme-border-dark);
+        }
+        
+        .panel-open {
+            transform: translateX(0);
+        }
+        
+        .panel-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--theme-border-dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--theme-light);
+        }
+        
+        .panel-close {
+            cursor: pointer;
+            color: var(--theme-text-medium);
+            transition: color 0.2s;
+        }
+        
+        .panel-close:hover {
+            color: var(--theme-light);
+        }
+        
+        .panel-content {
+            padding: 16px;
+            flex: 1;
+        }
+        
+        .panel-section {
+            margin-bottom: 24px;
+        }
+        
+        .panel-section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--theme-text-medium);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .panel-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .panel-list-item {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--theme-border-dark);
+        }
+        
+        .panel-list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .filter-group {
+            margin-bottom: 16px;
+        }
+        
+        .filter-title {
+            font-size: 0.8rem;
+            color: var(--theme-text-medium);
+            margin-bottom: 8px;
+        }
+        
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .filter-chip {
+            background-color: var(--theme-border-dark);
+            color: var(--theme-text-medium);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        .filter-chip:hover {
+            background-color: #2a343f;
+        }
+        
+        .filter-chip.active {
+            background-color: var(--theme-accent-primary);
+            color: var(--theme-dark);
+
+        }
+        
+        .metadata-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+        
+        .metadata-label {
+            color: var(--theme-text-medium);
+        }
+        
+        .metadata-value {
+            color: var(--theme-light);
+        }
+        
+        .content-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1400;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-speed);
+        }
+        
+        .backdrop-visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        body.panel-active {
+            overflow: hidden;
+        }
+        
+        /* Make main content shift when panel is open for larger screens */
+        @media (min-width: 1024px) {
+            .main-content {
+                transition: margin var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            body.panel-left-active .main-content {
+                margin-left: var(--panel-width);
+            }
+            
+            body.panel-right-active .main-content {
+                margin-right: var(--panel-width);
+            }
+        }
+
+        /* Timeline Scrubber Styles */
+        .timeline-scrubber-section {
+            background-color: rgba(30, 33, 36, 0.5);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--theme-border-dark);
+            border-bottom: 1px solid var(--theme-border-dark);
+            position: sticky;
+            top: var(--header-height);
+            z-index: 100;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            overflow: visible;
+        }
+        
+        .timeline-container {
+            height: 40px;
+            padding: 5px 0;
+        }
+        
+        .timeline-track {
+            width: 100%;
+            height: 4px;
+            position: relative;
+            margin: 15px 0;
+        }
+        
+        /* Custom range slider styling */
+        .timeline-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            position: absolute;
+            top: -14px;
+            height: 0;
+            outline: none;
+        }
+        
+        .timeline-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--theme-accent-primary);
+            cursor: pointer;
+            border: 2px solid var(--theme-dark);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            pointer-events: all;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .timeline-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--theme-accent-primary);
+            cursor: pointer;
+            border: 2px solid var(--theme-dark);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            pointer-events: all;
+            position: relative;
+            z-index: 2;
+        }
+        
+        #timelineStartSlider::-webkit-slider-thumb {
+            background: #2196F3;
+        }
+        
+        #timelineEndSlider::-webkit-slider-thumb {
+            background: #00BCD4;
+        }
+        
+        #timelineStartSlider::-moz-range-thumb {
+            background: #2196F3;
+        }
+        
+        #timelineEndSlider::-moz-range-thumb {
+            background: #00BCD4;
+        }
+        
+        .timeline-markers {
+            width: 100%;
+            margin-top: -15px;
+        }
+        
+        .timeline-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Hide timeline scrubber when scrolling past hero on smaller screens */
+        @media (max-width: 768px) {
+            .timeline-scrubber-section.scrolled-past-hero {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Left Context Panel -->
+    <div class="context-panel panel-left" id="leftPanel">
+        <div class="panel-header">
+            <h3 class="panel-title">Project Details</h3>
+            <div class="panel-close" id="closeLeftPanel"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="panel-content">
+            <div class="panel-section">
+                <h4 class="panel-section-title">Overview</h4>
+                <div id="panelProjectOverview"></div>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Metadata</h4>
+                <div class="metadata-list">
+                    <div class="metadata-item">
+                        <span class="metadata-label">Timeline:</span>
+                        <span class="metadata-value" id="panelProjectTimeline">2024-2025</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Category:</span>
+                        <span class="metadata-value" id="panelProjectCategory">Finance</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Status:</span>
+                        <span class="metadata-value" id="panelProjectStatus">Completed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Key Accomplishments</h4>
+                <ul class="panel-list" id="panelProjectAccomplishments">
+                    <!-- Will be populated dynamically -->
+                </ul>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Related Projects</h4>
+                <div class="related-items" id="panelRelatedProjects">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Context Panel -->
+    <div class="context-panel panel-right" id="rightPanel">
+        <div class="panel-header">
+            <h3 class="panel-title">Filters & Details</h3>
+            <div class="panel-close" id="closeRightPanel"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="panel-content">
+            <div class="panel-section">
+                <h4 class="panel-section-title">Filter Projects</h4>
+                <div class="filter-group">
+                    <div class="filter-title">By Category</div>
+                    <div class="filter-chips">
+                        <div class="filter-chip" data-filter="category" data-value="finance">Finance</div>
+                        <div class="filter-chip" data-filter="category" data-value="blockchain">Blockchain</div>
+                        <div class="filter-chip" data-filter="category" data-value="trading">Trading</div>
+                        <div class="filter-chip" data-filter="category" data-value="research">Research</div>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-title">By Status</div>
+                    <div class="filter-chips">
+                        <div class="filter-chip" data-filter="status" data-value="completed">Completed</div>
+                        <div class="filter-chip" data-filter="status" data-value="ongoing">Ongoing</div>
+                        <div class="filter-chip" data-filter="status" data-value="planned">Planned</div>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-title">By Skills</div>
+                    <div class="filter-chips">
+                        <div class="filter-chip" data-filter="skill" data-value="python">Python</div>
+                        <div class="filter-chip" data-filter="skill" data-value="blockchain">Blockchain</div>
+                        <div class="filter-chip" data-filter="skill" data-value="modeling">Financial Modeling</div>
+                        <div class="filter-chip" data-filter="skill" data-value="analysis">Data Analysis</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Selected Skill Details</h4>
+                <div id="skillDetailContent">
+                    <!-- Will be populated when a skill is selected -->
+                    <p class="text-sm text-gray-400">Select a skill to view details</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop for when panels are open -->
+    <div class="content-backdrop" id="contentBackdrop"></div>
+
+    <div class="main-content">
+        <nav id="navbar" class="shadow-lg">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <span class="font-semibold text-gray-100 text-lg hover:text-white transition duration-300 tracking-wider">SULAYMAN BOWLES</span>
+                        </a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="#about" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            About <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="#projects" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            Projects <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="#skills" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            Skills <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="#contact" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            Contact <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="https://linkedin.com/in/sulayman-bowles" target="_blank" class="nav-resume-btn ml-2 py-2 px-3 font-semibold rounded-sm shadow-md text-xs uppercase tracking-wider">
+                            Resume
+                        </a>
+                    </div>
+                    <div class="md:hidden flex items-center">
+                        <button class="outline-none mobile-menu-button p-2 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-700">
+                            <svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden mobile-menu">
+                <ul class="pt-2 pb-3 space-y-1 sm:px-3">
+                    <li><a href="#about" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">About</a></li>
+                    <li><a href="#projects" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">Projects</a></li>
+                    <li><a href="#skills" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">Skills</a></li>
+                    <li><a href="#contact" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">Contact</a></li>
+                    <li><a href="https://linkedin.com/in/sulayman-bowles" target="_blank" class="nav-resume-btn block text-sm px-3 py-2 mt-1 mx-2 font-semibold rounded-sm shadow-md text-center transition duration-150 ease-in-out uppercase tracking-wider">Resume</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    <section class="hero-section">
+        <div id="network-visualization"></div>
+        <div class="hero-content px-4">
+            <h1 class="hero-title revealable">SULAYMAN BOWLES</h1>
+            <p class="hero-subtitle revealable" style="transition-delay: 0.2s;">OPERATING AT THE NEXUS OF FINANCE, TECHNOLOGY & STRATEGIC INSIGHT.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+                <a href="#projects" class="btn-primary revealable" style="transition-delay: 0.4s;">Explore Initiatives</a>
+                <div class="flex items-center gap-2 revealable" style="transition-delay: 0.5s;">
+                    <button id="toggleVisLayout" class="btn-secondary text-xs py-1.5 px-3">
+                        <i class="fas fa-project-diagram mr-1"></i> Toggle View
+                    </button>
+                    <div class="relative inline-block">
+                        <button id="visLayersBtn" class="btn-secondary text-xs py-1.5 px-3">
+                            <i class="fas fa-layer-group mr-1"></i> Layers
+                        </button>
+                        <div id="layersDropdown" class="absolute right-0 mt-2 py-2 w-48 bg-gray-800 rounded-md shadow-xl z-50 hidden">
+                            <div class="px-4 py-1 text-xs text-left">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox text-blue-500" checked id="layerSkills">
+                                    <span class="ml-2 text-gray-300">Skills</span>
+                                </label>
+                            </div>
+                            <div class="px-4 py-1 text-xs text-left">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox text-blue-500" checked id="layerProjects">
+                                    <span class="ml-2 text-gray-300">Projects</span>
+                                </label>
+                            </div>
+                            <div class="px-4 py-1 text-xs text-left">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox text-blue-500" checked id="layerConnections">
+                                    <span class="ml-2 text-gray-300">Connections</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-scrubber-section">
+        <div class="max-w-6xl mx-auto px-4 py-4 relative">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-gray-300 text-sm font-semibold">TIMELINE FILTER</h3>
+                <span id="timelineRangeDisplay" class="text-gray-400 text-xs">2018 - 2024</span>
+            </div>
+            <div class="timeline-container relative">
+                <div class="timeline-track h-1 bg-gray-700 rounded-full relative overflow-hidden">
+                    <div id="timelineSelectedRange" class="absolute h-full bg-blue-400 left-0"></div>
+                </div>
+                <div class="timeline-markers flex justify-between relative -mt-2.5">
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2018</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2019</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2020</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2021</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2022</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2023</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2024</span>
+                    </div>
+                </div>
+                <div class="timeline-handles mt-2 relative">
+                    <input type="range" id="timelineStartSlider" min="2018" max="2024" step="0.25" value="2018" 
+                           class="timeline-slider absolute w-full appearance-none bg-transparent pointer-events-none">
+                    <input type="range" id="timelineEndSlider" min="2018" max="2024" step="0.25" value="2024" 
+                           class="timeline-slider absolute w-full appearance-none bg-transparent pointer-events-none">
+                </div>
+            </div>
+            <div class="flex justify-end mt-3">
+                <button id="applyTimelineFilter" class="btn-secondary text-xs py-1 px-2">
+                    <i class="fas fa-filter mr-1"></i> Apply Filter
+                </button>
+                <button id="resetTimelineFilter" class="btn-secondary text-xs py-1 px-2 ml-2 opacity-50">
+                    <i class="fas fa-undo mr-1"></i> Reset
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="section-title-container revealable">
+            <h2 class="section-title">ANALYST & INNOVATOR</h2>
+        </div>
+        <div class="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+            <div class="md:col-span-4 revealable">
+                 <img src="https://placehold.co/600x750/24282b/d8d8d8?text=S.B." alt="Sulayman Bowles" class="rounded-md shadow-2xl mx-auto border-2 border-gray-700" onerror="this.onerror=null;this.src='https://placehold.co/600x750/1e2124/767676?text=Image+Error';">
+            </div>
+            <div class="md:col-span-8 text-base leading-relaxed revealable" style="color: var(--theme-text-medium); transition-delay: 0.2s;">
+                <p class="mb-4">
+                    I am Sulayman Bowles, pursuing a Bachelor of Arts in Music at the University of Texas at Austin (Expected May 2028, GPA: 3.82). My focus is on the complex interplay within financial markets, technological systems, and musical structures.
+                </p>
+                <p class="mb-4">
+                    Key experiences include co-founding a VC-backed <strong class="text-accent">blockchain project (Bittensor protocol)</strong>, securing a DormDAO grant, and serving as an Investment Team Analyst at <strong class="text-accent">Texas Blockchain</strong>. I've also contributed to commercial real estate through pro forma modeling and database redesign at Investors Alliance, Inc.
+                </p>
+                <p class="mb-4">
+                    My skill set encompasses market analysis, financial modeling, and strategic advisory, with a strong interest in algorithmic trading, stablecoin research, and data visualization.
+                </p>
+                 <p>
+                    Beyond professional and academic work, I am a University-Wide Representative (UT Student Government), a Double Bassist (University Symphony Orchestra), and mentor in youth programs.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section" style="background-color: #1c1f22;">
+        <div class="section-title-container revealable">
+             <h2 class="section-title">KEY INITIATIVES & ANALYSES</h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="card flex flex-col justify-between revealable" data-project-id="bittensor" data-project-start="2022.5" data-project-end="2024">
+                <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Bittensor+Project" alt="VC-Backed Bittensor Project" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">VC-Backed Bittensor Project</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Co-founded and architected a blockchain project on Bittensor. Secured $10K grant (DormDAO), managed governance and technicals.</p>
+                </div>
+                <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Details (NDA)</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.1s;" data-project-id="cryptoDD" data-project-start="2021" data-project-end="2023">
+                <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Crypto+DD" alt="Texas Blockchain" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Crypto Due Diligence</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Analyst for Texas Blockchain ($120K AUM). Due diligence on 10+ cryptoassets, risk/valuation summaries. Pitched $5K-$8K allocations.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Case Studies</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.2s;" data-project-id="imcTrading" data-project-start="2022" data-project-end="2023">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Algo+Trading" alt="IMC Trading Challenge" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">IMC Prosperity Trading Challenge</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Devised algorithmic/discretionary strategies in global market simulations. Focused on quantitative approaches.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Strategy Insights</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.3s;" data-project-id="stablecoinResearch" data-project-start="2020" data-project-end="2021.5">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Stablecoin+Research" alt="Messari Stablecoin Research" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Messari Stablecoin Research</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">In-depth research on stablecoin mechanisms/market trends. Automated data-monitoring workflows for reporting efficiency.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">View Research</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.4s;" data-project-id="creModeling" data-project-start="2018.5" data-project-end="2020">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=CRE+Modeling" alt="Commercial Real Estate Internship" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Commercial Real Estate Analysis</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Intern at Investors Alliance, Inc. Built pro forma models & cash-flow forecasts. Rebuilt investment database & storage schema.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Modeling Samples</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.5s;" data-project-id="energyTrading">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Energy+Trading" alt="UTEXAS Energy Trading" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Energy Commodity Trading Analysis</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">UTEXAS Energy Trading. Market analysis of energy commodities (electricity, gas, renewables) for trading opportunities.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Market Reports</button></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <div class="section-title-container revealable">
+            <h2 class="section-title">TECHNICAL ARSENAL & PROFICIENCIES</h2>
+        </div>
+        <div class="max-w-4xl mx-auto"> {/* Increased max-width for better layout of categories */}
+            <p class="text-base mb-10 text-center revealable" style="color: var(--theme-text-medium); transition-delay: 0.1s;">
+                A curated overview of core competencies spanning technical skills, analytical methodologies, and essential tools.
+            </p>
+
+            <div class="skills-category revealable" style="transition-delay: 0.2s;">
+                <h3 class="skills-category-title">Technical Proficiencies</h3>
+                <div class="skills-list">
+                    <span class="skill-badge">Python</span>
+                    <span class="skill-badge">SQL (Basic)</span>
+                    <span class="skill-badge">Blockchain Protocol Analysis</span>
+                    <span class="skill-badge">Algorithmic Strategy Design</span>
+                    <span class="skill-badge">Data Monitoring & Automation</span>
+                    <span class="skill-badge">Git & GitHub</span>
+                </div>
+            </div>
+
+            <div class="skills-category revealable" style="transition-delay: 0.3s;">
+                <h3 class="skills-category-title">Financial Analysis & Modeling</h3>
+                <div class="skills-list">
+                    <span class="skill-badge">Financial Modeling</span>
+                    <span class="skill-badge">Pro Forma Analysis</span>
+                    <span class="skill-badge">Cash-Flow Forecasting</span>
+                    <span class="skill-badge">Cryptoasset Due Diligence</span>
+                    <span class="skill-badge">Valuation Analysis</span>
+                    <span class="skill-badge">Market Research & Analysis</span>
+                    <span class="skill-badge">Risk Assessment</span>
+                </div>
+            </div>
+
+            <div class="skills-category revealable" style="transition-delay: 0.4s;">
+                <h3 class="skills-category-title">Software & Tools</h3>
+                <div class="skills-list">
+                    <span class="skill-badge">Microsoft Office Suite (Excel, Word, PowerPoint)</span>
+                    <span class="skill-badge">Tableau</span>
+                    <span class="skill-badge">Google Workspace</span>
+                    <span class="skill-badge">Canva</span>
+                    <span class="skill-badge">Bloomberg Market Concepts (Certification)</span>
+                </div>
+            </div>
+            
+            <div class="skills-category revealable" style="transition-delay: 0.5s;">
+                <h3 class="skills-category-title">Languages</h3>
+                <div class="skills-list">
+                    <span class="skill-badge">English (Native)</span>
+                    <span class="skill-badge">Spanish (Intermediate)</span>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center revealable" style="transition-delay: 0.6s;">
+                <h3 class="text-lg font-semibold mb-3" style="color: var(--theme-light);">Key Certifications</h3>
+                <div class="flex flex-wrap justify-center items-center gap-1.5 text-xs">
+                    <span class="skill-badge !bg-gray-700 !text-gray-300 !border-gray-600">Google Data Analytics</span>
+                    <span class="skill-badge !bg-gray-700 !text-gray-300 !border-gray-600">Google Project Management</span>
+                    <span class="skill-badge !bg-gray-700 !text-gray-300 !border-gray-600">IBM Program Manager</span>
+                    {/* <span class="skill-badge !bg-gray-700 !text-gray-300 !border-gray-600">Bloomberg Market Concepts</span> Merged into Software & Tools */}
+                    <span class="skill-badge !bg-gray-700 !text-gray-300 !border-gray-600">Bloomberg Finance Fundamentals</span>
+                    <span class="skill-badge !bg-gray-700 !text-gray-300 !border-gray-600">Yale Financial Markets (Honors)</span>
+                    <span class="skill-badge !bg-gray-700 !text-gray-300 !border-gray-600">IBM Python for Data Science & AI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section" style="background-color: #1c1f22;">
+        <div class="section-title-container revealable">
+            <h2 class="section-title">ENGAGE & CONNECT</h2>
+        </div>
+        <div class="max-w-lg mx-auto text-center">
+            <p class="text-base mb-6 revealable" style="color: var(--theme-text-medium); transition-delay: 0.1s;">
+                Seeking to connect on innovative projects, investment opportunities, or strategic discussions at the intersection of finance and technology.
+            </p>
+            <form action="mailto:sulayman.bowles@utexas.edu" method="POST" class="space-y-4 revealable" style="transition-delay: 0.2s;">
+                <div><input type="text" name="name" id="name" autocomplete="name" required class="block w-full shadow-sm py-2 px-3 rounded-sm" placeholder="Name"></div>
+                <div><input type="email" name="email" id="email" autocomplete="email" required class="block w-full shadow-sm py-2 px-3 rounded-sm" placeholder="Email"></div>
+                <div><input type="text" name="subject" id="subject" autocomplete="subject" required class="block w-full shadow-sm py-2 px-3 rounded-sm" placeholder="Subject"></div>
+                <div><textarea id="message" name="message" rows="3" required class="block w-full shadow-sm py-2 px-3 rounded-sm" placeholder="Message..."></textarea></div>
+                <div><button type="submit" class="w-full btn-primary py-2.5 px-5 text-sm">Initiate Contact</button></div>
+            </form>
+            <div class="mt-8 revealable" style="transition-delay: 0.3s;">
+                <p class="text-xs uppercase tracking-wider" style="color: var(--theme-text-darker);">Professional Networks</p>
+                <div class="flex justify-center space-x-5 mt-3">
+                    <a href="https://linkedin.com/in/sulayman-bowles" target="_blank" class="transition duration-300 hover:scale-110" style="color: var(--theme-text-darker);"><i class="fab fa-linkedin fa-lg"></i><span class="sr-only">LinkedIn</span></a>
+                    <a href="https://github.com/SulaymanB2024" target="_blank" class="transition duration-300 hover:scale-110" style="color: var(--theme-text-darker);"><i class="fab fa-github fa-lg"></i><span class="sr-only">GitHub</span></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-5 text-center text-xs" style="background-color: black; color: var(--theme-text-darker);">
+        <p>&copy; <span id="currentYear"></span> Sulayman Bowles. All Rights Reserved.</p>
+        <p class="mt-1">Advancing at the Forefront of Finance and Technology.</p>
+    </footer>
+    
+    <!-- Modular JavaScript imports -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
+            <img src="" alt="Project Image" class="modal-image" id="modalProjectImage" onerror="this.style.display='none';">
+            <div class="modal-body">
+                <h4 id="modalProjectTitle"></h4>
+                <div id="modalProjectDescription">
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize Particles.js with enhanced interactivity
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {"value": 60, "density": {"enable": true, "value_area": 900}}, 
+                "color": {"value": "#333333"}, 
+                "shape": {"type": "circle"},
+                "opacity": {"value": 0.25, "random": true, "anim": {"enable": true, "speed": 0.5, "opacity_min": 0.05, "sync": false}},
+                "size": {"value": 1.8, "random": true}, 
+                "line_linked": {"enable": true, "distance": 130, "color": "#2a2e32", "opacity": 0.2, "width": 1}, 
+                "move": {"enable": true, "speed": 0.9, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false}
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {"enable": true, "mode": "grab"}, 
+                    "onclick": {"enable": true, "mode": "push"}, 
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {"distance": 160, "line_linked": {"opacity": 0.35}}, 
+                    "bubble": {"distance": 200,"size": 20,"duration": 2,"opacity": 0,"speed": 3},
+                    "repulse": {"distance": 100, "duration": 0.4},
+                    "push": {"particles_nb": 5}, 
+                    "remove": {"particles_nb": 2}
+                }
+            },
+            "retina_detect": true
+        });
+
+        // --- Mobile Menu Toggle ---
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+        const navLinks = menu.querySelectorAll('a');
+        btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+        navLinks.forEach(link => link.addEventListener('click', () => menu.classList.add('hidden')));
+
+        // --- Smooth Scrolling for Anchor Links ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const navbarHeight = document.getElementById('navbar').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+                    window.scrollTo({top: targetPosition, behavior: 'smooth'});
+                }
+            });
+        });
+
+        // --- Dynamic Year for Footer ---
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // --- Navbar Background Change on Scroll ---
+        const navbar = document.getElementById('navbar');
+        window.onscroll = function() {
+            if (window.pageYOffset > 50) {
+                navbar.style.backgroundColor = "rgba(30, 33, 36, 0.95)"; 
+                navbar.classList.add('shadow-xl');
+            } else {
+                navbar.style.backgroundColor = "rgba(30, 33, 36, 0.85)"; 
+                navbar.classList.remove('shadow-xl');
+            }
+        };
+
+        // --- Contact Form Mailto Functionality ---
+        const contactForm = document.querySelector('#contact form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault(); 
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subjectVal = document.getElementById('subject').value;
+                const messageVal = document.getElementById('message').value;
+                const mailtoLink = `mailto:sulayman.bowles@utexas.edu?subject=${encodeURIComponent(subjectVal + " - Portfolio Inquiry: " + name + " <" + email + ">")}&body=${encodeURIComponent(messageVal)}`;
+                window.location.href = mailtoLink;
+            });
+        }
+
+        // --- Scroll Reveal Animations ---
+        const revealables = document.querySelectorAll('.revealable');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        revealables.forEach(el => revealObserver.observe(el));
+
+        // --- Project Modal Functionality ---
+        const modal = document.getElementById("projectModal");
+        const modalProjectTitle = document.getElementById("modalProjectTitle");
+        const modalProjectImage = document.getElementById("modalProjectImage");
+        const modalProjectDescription = document.getElementById("modalProjectDescription");
+        const projectDetailButtons = document.querySelectorAll(".project-details-btn");
+        const closeModalBtn = document.querySelector(".modal-close-btn");
+
+        const projectDetails = {
+            bittensor: {
+                title: "VC-Backed Bittensor Project (Details)",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Bittensor+Protocol+Deep+Dive",
+                description: `
+                    <p>This project involved architecting a novel solution on the <strong>Bittensor protocol</strong>, a decentralized machine learning network. As a co-founder, my responsibilities were multifaceted, spanning from initial concept and whitepaper development to technical architecture and grant acquisition.</p>
+                    <p><strong>Key Achievements & Responsibilities:</strong></p>
+                    <ul>
+                        <li>Secured a <strong>$10,000 grant from DormDAO</strong> through a competitive pitching process, validating the project's potential and our team's vision.</li>
+                        <li>Led the design of the project's governance model, ensuring fair participation and decentralized decision-making processes.</li>
+                        <li>Defined core technical requirements and collaborated with development resources to translate these into a functional PoC (Proof of Concept).</li>
+                        <li>Conducted extensive research into subnets, tokenomics, and incentive mechanisms within the Bittensor ecosystem to optimize our project's integration and viability.</li>
+                        <li>Due to the sensitive nature of ongoing development and intellectual property, further specific details are covered under a Non-Disclosure Agreement.</li>
+                    </ul>
+                    <p><em>Technologies involved: Blockchain, Bittensor Protocol, Python, Decentralized Systems, Governance Models.</em></p>
+                `
+            },
+            cryptoDD: {
+                title: "Crypto Due Diligence Case Studies",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=In-Depth+Crypto+Analysis",
+                description: `
+                    <p>As an Investment Team Analyst at Texas Blockchain, I was responsible for conducting thorough due diligence on a variety of cryptoasset projects. This involved a multi-faceted approach to evaluate potential investments for a $120K AUM student-managed portfolio.</p>
+                    <p><strong>Process & Deliverables:</strong></p>
+                    <ul>
+                        <li>Analyzed over 10 distinct cryptoasset projects, ranging from Layer 1 protocols to DeFi applications and NFT ecosystems.</li>
+                        <li>Developed comprehensive risk assessment frameworks, considering technical vulnerabilities, market risks, regulatory concerns, and team capabilities.</li>
+                        <li>Created detailed valuation summaries using various models, including comparative analysis, network value to transactions (NVT) ratios, and discounted cash flow (DCF) where applicable.</li>
+                        <li>Prepared and delivered investment pitches, successfully allocating between $5,000 - $8,000 per selected idea.</li>
+                        <li>Focused on identifying projects with strong fundamentals, innovative technology, and sustainable tokenomics.</li>
+                    </ul>
+                    <p><em>Example areas of analysis: Token utility, smart contract audits, community engagement, competitive landscape, roadmap viability, and macroeconomic factors influencing the crypto space.</em></p>
+                `
+            },
+            imcTrading: {
+                title: "IMC Prosperity Trading Challenge: Strategy Insights",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Algorithmic+Trading+Simulation",
+                description: `
+                    <p>Participated in the IMC Prosperity Global Trading Challenge, a highly competitive event simulating real-world market dynamics. This involved developing and testing both algorithmic and discretionary trading strategies across multiple rounds.</p>
+                    <p><strong>Approach & Learnings:</strong></p>
+                    <ul>
+                        <li>Focused on quantitative strategies, including statistical arbitrage, momentum trading, and mean-reversion techniques.</li>
+                        <li>Utilized simulated market data to backtest strategies and optimize parameters for risk management and profitability.</li>
+                        <li>Developed algorithms to automate trade execution based on predefined signals and market conditions.</li>
+                        <li>Gained practical experience in market microstructure, order book dynamics, and the psychological aspects of trading under pressure.</li>
+                        <li>The challenge emphasized rapid decision-making, adaptability to changing market scenarios, and rigorous analytical thinking.</li>
+                    </ul>
+                    <p><em>This experience honed my skills in data analysis, algorithmic design, and risk assessment in a fast-paced trading environment.</em></p>
+                `
+            },
+             stablecoinResearch: {
+                title: "Messari Stablecoin Research: Market Analysis",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Stablecoin+Ecosystem+Study",
+                description: `
+                    <p>As an analyst for Messari, I conducted in-depth research into the evolving landscape of stablecoins. This involved examining various stablecoin mechanisms, market trends, and their impact on the broader digital asset ecosystem.</p>
+                    <p><strong>Key Research Areas:</strong></p>
+                    <ul>
+                        <li>Analyzed different types of stablecoins: fiat-collateralized, crypto-collateralized, and algorithmic.</li>
+                        <li>Investigated peg stability mechanisms, risk factors (e.g., de-pegging events, regulatory scrutiny), and adoption metrics across multiple assets.</li>
+                        <li>Automated data-monitoring workflows using Python scripts to track key stablecoin metrics such as market capitalization, trading volume, and on-chain velocity.</li>
+                        <li>Contributed to reports and analyses on stablecoin market trends, highlighting opportunities and challenges for different protocols and use cases.</li>
+                        <li>Explored the role of stablecoins in DeFi, cross-border payments, and as a store of value in volatile markets.</li>
+                    </ul>
+                    <p><em>This research provided valuable insights into the critical role stablecoins play in the digital economy and the complexities of maintaining their stability and utility.</em></p>
+                `
+            },
+            creModeling: {
+                title: "Commercial Real Estate Analysis: Modeling Samples",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=CRE+Financial+Forecasting",
+                description: `
+                    <p>During my internship at Investors Alliance, Inc., I was deeply involved in the financial analysis of commercial real estate properties. This included building sophisticated financial models to support investment decisions.</p>
+                    <p><strong>Core Responsibilities & Outputs:</strong></p>
+                    <ul>
+                        <li>Developed detailed pro forma financial models for various property types (e.g., office, retail, multifamily).</li>
+                        <li>Created comprehensive cash-flow forecasts, incorporating assumptions for rental income, operating expenses, capital expenditures, and debt service.</li>
+                        <li>Performed sensitivity analysis to assess the impact of different market scenarios on investment returns (IRR, NPV, equity multiple).</li>
+                        <li>Contributed to the rebuilding of the company's internal investment database, focusing on data integrity and efficient reporting. This involved redesigning the storage schema and standardizing data input processes.</li>
+                        <li>Assisted in the preparation of investment memorandums and presentations for potential investors and internal review.</li>
+                    </ul>
+                    <p><em>Tools used: Advanced Microsoft Excel, ARGUS (exposure), SQL (for database interaction). This experience provided a strong foundation in real estate valuation and financial due diligence.</em></p>
+                `
+            },
+            energyTrading: {
+                title: "Energy Commodity Trading Analysis: Market Reports",
+                image: "https://placehold.co/800x450/1e2124/d8d8d8?text=Energy+Market+Dynamics",
+                description: `
+                    <p>As a cohort member at UTEXAS Energy Trading, I engaged in the analysis of energy commodity markets, including electricity, natural gas, and renewables. The program focused on identifying trading opportunities through fundamental and technical analysis.</p>
+                    <p><strong>Activities & Focus Areas:</strong></p>
+                    <ul>
+                        <li>Conducted market research on supply and demand dynamics, weather patterns, geopolitical events, and regulatory changes affecting energy prices.</li>
+                        <li>Collaborated with team members to develop and refine trading models and strategies.</li>
+                        <li>Analyzed historical price data and volatility to identify potential arbitrage opportunities and trends.</li>
+                        <li>Prepared and presented market reports, summarizing key findings and potential trading ideas.</li>
+                        <li>Gained exposure to risk management techniques specific to energy markets and portfolio optimization strategies.</li>
+                    </ul>
+                    <p><em>This program provided a comprehensive overview of energy trading operations and the analytical skills required to navigate these complex markets.</em></p>
+                `
+            }
+        };
+
+        projectDetailButtons.forEach(button => {
+            button.addEventListener("click", function(event) {
+                event.preventDefault();
+                const card = this.closest(".card");
+                const projectId = card.dataset.projectId;
+                const details = projectDetails[projectId];
+
+                if (details) {
+                    modalProjectTitle.textContent = details.title;
+                    modalProjectImage.src = details.image;
+                    modalProjectImage.alt = details.title + " Image";
+                    if (details.image && details.image !== "https://placehold.co/1x1/0000/0000?text=_") { 
+                        modalProjectImage.style.display = 'block';
+                    } else {
+                        modalProjectImage.style.display = 'none';
+                    }
+                    modalProjectDescription.innerHTML = details.description; 
+                    modal.style.display = "block";
+                    document.body.style.overflow = 'hidden'; 
+                } else {
+                    modalProjectTitle.textContent = card.querySelector('.project-title').textContent + " (Details)";
+                    modalProjectImage.src = card.querySelector('.project-image').src;
+                    modalProjectImage.alt = card.querySelector('.project-title').textContent + " Image";
+                    modalProjectImage.style.display = 'block';
+                    modalProjectDescription.innerHTML = `<p>${card.querySelector('.project-summary').textContent} More details for this project are coming soon.</p>`;
+                    modal.style.display = "block";
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // --- Sliding Context Panels Functionality ---
+        const leftPanel = document.getElementById('leftPanel');
+        const rightPanel = document.getElementById('rightPanel');
+        const contentBackdrop = document.getElementById('contentBackdrop');
+        const closeLeftPanelBtn = document.getElementById('closeLeftPanel');
+        const closeRightPanelBtn = document.getElementById('closeRightPanel');
+        
+        // Project cards - open left panel with project details
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Only open panel if the click wasn't on the details button (which opens modal)
+                if (!e.target.classList.contains('project-details-btn')) {
+                    const projectId = this.dataset.projectId;
+                    const project = projectDetails[projectId];
+                    
+                    if (project) {
+                        // Populate the left panel with project data
+                        document.getElementById('panelProjectOverview').innerHTML = `<p>${project.description.split('</p>')[0].replace('<p>', '')}</p>`;
+                        
+                        // Set metadata
+                        document.getElementById('panelProjectTimeline').textContent = '2023-2025'; // Example - would be dynamic in real data
+                        document.getElementById('panelProjectCategory').textContent = projectId.includes('crypto') ? 'Finance/Blockchain' : 
+                                                                               projectId.includes('Trading') ? 'Trading' :
+                                                                               'Research & Analysis';
+                        document.getElementById('panelProjectStatus').textContent = 'Completed';
+                        
+                        // Extract accomplishments from the description
+                        const accomplishments = document.getElementById('panelProjectAccomplishments');
+                        accomplishments.innerHTML = '';
+                        if (project.description.includes('<ul>')) {
+                            const ulContent = project.description.split('<ul>')[1].split('</ul>')[0];
+                            const items = ulContent.split('<li>').filter(item => item.trim().length > 0);
+                            items.forEach(item => {
+                                const li = document.createElement('li');
+                                li.className = 'panel-list-item';
+                                li.innerHTML = item.replace('</li>', '');
+                                accomplishments.appendChild(li);
+                            });
+                        }
+                        
+                        // Show related projects
+                        const relatedContainer = document.getElementById('panelRelatedProjects');
+                        relatedContainer.innerHTML = '';
+                        
+                        // Get 2 random project IDs that are not the current one
+                        const projectIds = Object.keys(projectDetails);
+                        const relatedIds = projectIds
+                            .filter(id => id !== projectId)
+                            .sort(() => 0.5 - Math.random())
+                            .slice(0, 2);
+                        
+                        relatedIds.forEach(id => {
+                            const relatedDiv = document.createElement('div');
+                            relatedDiv.className = 'panel-list-item cursor-pointer hover:bg-gray-700 px-2 py-1 rounded transition-colors';
+                            relatedDiv.dataset.projectId = id;
+                            relatedDiv.innerHTML = `
+                                <h5 class="text-sm font-semibold text-gray-100">${projectDetails[id].title.split(':')[0]}</h5>
+                                <p class="text-xs text-gray-400">${projectDetails[id].description.split('</p>')[0].replace('<p>', '').substring(0, 80)}...</p>
+                            `;
+                            relatedDiv.addEventListener('click', () => {
+                                // Open the clicked related project in the left panel
+                                const event = new MouseEvent('click', {
+                                    bubbles: true,
+                                    cancelable: true,
+                                    view: window
+                                });
+                                document.querySelector(`.card[data-project-id="${id}"]`).dispatchEvent(event);
+                            });
+                            relatedContainer.appendChild(relatedDiv);
+                        });
+                        
+                        openLeftPanel();
+                    }
+                }
+            });
+        });
+        
+        // Skill badges - open right panel with skill details
+        document.querySelectorAll('.skill-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                const skillName = this.textContent;
+                const skillDetailContent = document.getElementById('skillDetailContent');
+                
+                // Create content for the selected skill
+                skillDetailContent.innerHTML = `
+                    <h4 class="text-md font-semibold mb-3">${skillName}</h4>
+                    <p class="mb-3 text-sm">This is detailed information about the ${skillName} skill, including proficiency level, experience, and relevant projects.</p>
+                    <div class="mb-4">
+                        <h5 class="text-sm font-semibold mb-1">Proficiency Level</h5>
+                        <div class="bg-gray-700 h-2 rounded-full">
+                            <div class="bg-blue-400 h-2 rounded-full" style="width: ${Math.random() * 40 + 60}%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h5 class="text-sm font-semibold mb-1">Related Projects</h5>
+                        <ul class="text-sm space-y-1">
+                            <li>• ${Object.values(projectDetails)[Math.floor(Math.random() * Object.keys(projectDetails).length)].title.split(':')[0]}</li>
+                            <li>• ${Object.values(projectDetails)[Math.floor(Math.random() * Object.keys(projectDetails).length)].title.split(':')[0]}</li>
+                        </ul>
+                    </div>
+                `;
+                
+                // Add active class to the selected skill badge
+                document.querySelectorAll('.filter-chip').forEach(chip => {
+                    if (chip.dataset.value.toLowerCase() === skillName.toLowerCase() || 
+                        skillName.toLowerCase().includes(chip.dataset.value.toLowerCase())) {
+                        chip.classList.add('active');
+                    } else {
+                        chip.classList.remove('active');
+                    }
+                });
+                
+                openRightPanel();
+            });
+        });
+        
+        // Filter chips functionality
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                this.classList.toggle('active');
+                
+                // In a real application, we would filter the projects here
+                // For this demo, we'll just show what filtering would look like
+                const filterType = this.dataset.filter;
+                const filterValue = this.dataset.value;
+                
+                if (this.classList.contains('active')) {
+                    console.log(`Filtering by ${filterType}: ${filterValue}`);
+                    // Apply visual feedback to show filtering is active
+                    document.querySelectorAll('.card').forEach(card => {
+                        // This is just a simple demonstration - in practice would check real data attributes
+                        if (Math.random() > 0.7) {
+                            card.style.opacity = '0.5';
+                        }
+                    });
+                } else {
+                    console.log(`Removing filter ${filterType}: ${filterValue}`);
+                    // Reset visual feedback
+                    document.querySelectorAll('.card').forEach(card => {
+                        card.style.opacity = '1';
+                    });
+                }
+            });
+        });
+        
+        // Panel open/close functions
+        function openLeftPanel() {
+            leftPanel.classList.add('panel-open');
+            contentBackdrop.classList.add('backdrop-visible');
+            document.body.classList.add('panel-active', 'panel-left-active');
+        }
+        
+        function closeLeftPanel() {
+            leftPanel.classList.remove('panel-open');
+            if (!rightPanel.classList.contains('panel-open')) {
+                contentBackdrop.classList.remove('backdrop-visible');
+                document.body.classList.remove('panel-active');
+            }
+            document.body.classList.remove('panel-left-active');
+        }
+        
+        function openRightPanel() {
+            rightPanel.classList.add('panel-open');
+            contentBackdrop.classList.add('backdrop-visible');
+            document.body.classList.add('panel-active', 'panel-right-active');
+        }
+        
+        function closeRightPanel() {
+            rightPanel.classList.remove('panel-open');
+            if (!leftPanel.classList.contains('panel-open')) {
+                contentBackdrop.classList.remove('backdrop-visible');
+                document.body.classList.remove('panel-active');
+            }
+            document.body.classList.remove('panel-right-active');
+        }
+        
+        // Close panel buttons
+        closeLeftPanelBtn.addEventListener('click', closeLeftPanel);
+        closeRightPanelBtn.addEventListener('click', closeRightPanel);
+        
+        // Click on backdrop to close panels
+        contentBackdrop.addEventListener('click', () => {
+            closeLeftPanel();
+            closeRightPanel();
+        });
+        
+        // Close panels with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLeftPanel();
+                closeRightPanel();
+            }
+        });
+
+        // D3.js Network Visualization
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // Create SVG for network visualization
+        const svg = d3.select("#network-visualization")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+            
+        // Create a group for zooming functionality
+        const g = svg.append("g");
+            
+        // Define forces for the network graph
+        const simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("x", d3.forceX(width / 2).strength(0.05))
+            .force("y", d3.forceY(height / 2).strength(0.05));
+            
+        // Define zoom behavior
+        const zoom = d3.zoom()
+            .scaleExtent([0.1, 4])
+            .on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            });
+            
+        svg.call(zoom);
+        
+        // Generate skill data from skill badges
+        const skills = Array.from(document.querySelectorAll('.skill-badge')).map(badge => ({
+            id: badge.textContent.trim(),
+            group: "skill",
+            value: Math.random() * 10 + 5
+        }));
+        
+        // Generate project data from project cards
+        const projects = Array.from(document.querySelectorAll('.card')).map(card => ({
+            id: card.querySelector('.project-title').textContent.split(':')[0].trim(),
+            group: "project",
+            value: Math.random() * 15 + 10
+        }));
+        
+        // Create nodes by combining skills and projects
+        const nodes = [...skills, ...projects];
+        
+        // Generate links between nodes (relationships between skills and projects)
+        const links = [];
+        
+        // For each project, link to 3-5 random skills
+        projects.forEach(project => {
+            const shuffledSkills = [...skills].sort(() => 0.5 - Math.random());
+            const numLinks = Math.floor(Math.random() * 3) + 3; // 3 to 5 links
+            
+            for (let i = 0; i < numLinks && i < shuffledSkills.length; i++) {
+                links.push({
+                    source: project.id,
+                    target: shuffledSkills[i].id,
+                    value: Math.random() * 2 + 1
+                });
+            }
+        });
+        
+        // Add links between skills based on relatedness (random for demo)
+        for (let i = 0; i < skills.length; i++) {
+            for (let j = i + 1; j < skills.length; j++) {
+                if (Math.random() > 0.85) { // 15% chance of connection
+                    links.push({
+                        source: skills[i].id,
+                        target: skills[j].id,
+                        value: Math.random() * 0.5 + 0.5
+                    });
+                }
+            }
+        }
+        
+        // Create link elements
+        const link = g.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(links)
+            .enter()
+            .append("line")
+            .attr("stroke-width", d => Math.sqrt(d.value))
+            .attr("stroke", "#4F5458")
+            .attr("opacity", 0.5);
+            
+        // Create node elements
+        const node = g.append("g")
+            .attr("class", "nodes")
+            .selectAll("circle")
+            .data(nodes)
+            .enter()
+            .append("circle")
+            .attr("r", d => d.group === "project" ? 8 : 5)
+            .attr("fill", d => d.group === "project" ? "#00BCD4" : "#FF6D00")
+            .attr("stroke", "#191f27")
+            .attr("stroke-width", 1.5)
+            .call(drag(simulation));
+            
+        // Add labels to nodes
+        const label = g.append("g")
+            .attr("class", "labels")
+            .selectAll("text")
+            .data(nodes)
+            .enter()
+            .append("text")
+            .text(d => d.id)
+            .attr("font-size", d => d.group === "project" ? "10px" : "8px")
+            .attr("dx", 12)
+            .attr("dy", ".35em")
+            .style("fill", "#d8d8d8")
+            .style("opacity", 0)
+            .style("pointer-events", "none");
+            
+        // Hover effects for nodes
+        node.on("mouseover", function(event, d) {
+            d3.select(this)
+                .attr("r", d => d.group === "project" ? 12 : 8)
+                .attr("fill", d => d.group === "project" ? "#00E5FF" : "#FF9E40");
+                
+            // Highlight connected links
+            link.style("stroke", function(l) {
+                if (l.source.id === d.id || l.target.id === d.id) {
+                    return "#FFFFFF";
+                } else {
+                    return "#4F5458";
+                }
+            })
+            .style("opacity", function(l) {
+                if (l.source.id === d.id || l.target.id === d.id) {
+                    return 1;
+                } else {
+                    return 0.2;
+                }
+            });
+            
+            // Show label for hovered node
+            label.style("opacity", function(l) {
+                if (l.id === d.id) return 1;
+                return 0;
+            });
+        })
+        .on("mouseout", function() {
+            d3.select(this)
+                .attr("r", d => d.group === "project" ? 8 : 5)
+                .attr("fill", d => d.group === "project" ? "#00BCD4" : "#FF6D00");
+                
+            // Reset link styles
+            link.style("stroke", "#4F5458")
+                .style("opacity", 0.5);
+                
+            // Hide labels
+            label.style("opacity", 0);
+        })
+        .on("click", function(event, d) {
+            if (d.group === "project") {
+                // Find and click the corresponding project card
+                document.querySelectorAll('.card').forEach(card => {
+                    if (card.querySelector('.project-title').textContent.split(':')[0].trim() === d.id) {
+                        card.click();
+                    }
+                });
+            } else if (d.group === "skill") {
+                // Find and click the corresponding skill badge
+                document.querySelectorAll('.skill-badge').forEach(badge => {
+                    if (badge.textContent.trim() === d.id) {
+                        badge.click();
+                    }
+                });
+            }
+        });
+            
+        // Define drag behavior for nodes
+        function drag(simulation) {
+            function dragstarted(event) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                event.subject.fx = event.subject.x;
+                event.subject.fy = event.subject.y;
+            }
+            
+            function dragged(event) {
+                event.subject.fx = event.x;
+                event.subject.fy = event.y;
+            }
+            
+            function dragended(event) {
+                if (!event.active) simulation.alphaTarget(0);
+                event.subject.fx = null;
+                event.subject.fy = null;
+            }
+            
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+        }
+            
+        // Update positions on simulation tick
+        simulation
+            .nodes(nodes)
+            .on("tick", () => {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+                    
+                node
+                    .attr("cx", d => d.x)
+                    .attr("cy", d => d.y);
+                    
+                label
+                    .attr("x", d => d.x)
+                    .attr("y", d => d.y);
+            });
+            
+        simulation.force("link")
+            .links(links);
+            
+        // Layer toggle functionality
+        const toggleVisLayout = document.getElementById('toggleVisLayout');
+        const layerSkillsCheckbox = document.getElementById('layerSkills');
+        const layerProjectsCheckbox = document.getElementById('layerProjects');
+        const layerConnectionsCheckbox = document.getElementById('layerConnections');
+        const visLayersBtn = document.getElementById('visLayersBtn');
+        const layersDropdown = document.getElementById('layersDropdown');
+        
+        // Toggle between different visualization layouts
+        toggleVisLayout.addEventListener('click', () => {
+            if (simulation.force("center").x() === width / 2) {
+                // Switch to radial layout
+                simulation.force("center", null);
+                simulation.force("x", d3.forceX(d => d.group === "project" ? width * 0.3 : width * 0.7).strength(0.4));
+                simulation.force("y", d3.forceY(height / 2).strength(0.2));
+            } else {
+                // Switch back to force-directed layout
+                simulation.force("center", d3.forceCenter(width / 2, height / 2));
+                simulation.force("x", d3.forceX(width / 2).strength(0.05));
+                simulation.force("y", d3.forceY(height / 2).strength(0.05));
+            }
+            
+            simulation.alpha(1).restart();
+        });
+        
+        // Show/hide layers dropdown
+        visLayersBtn.addEventListener('click', () => {
+            layersDropdown.classList.toggle('hidden');
+        });
+        
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!visLayersBtn.contains(event.target) && !layersDropdown.contains(event.target)) {
+                layersDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Layer visibility toggles
+        layerSkillsCheckbox.addEventListener('change', () => {
+            const skillNodes = node.filter(d => d.group === "skill");
+            if (layerSkillsCheckbox.checked) {
+                skillNodes.style("visibility", "visible");
+            } else {
+                skillNodes.style("visibility", "hidden");
+            }
+            
+            // Update links visibility based on connected nodes visibility
+            updateLinkVisibility();
+        });
+        
+        layerProjectsCheckbox.addEventListener('change', () => {
+            const projectNodes = node.filter(d => d.group === "project");
+            if (layerProjectsCheckbox.checked) {
+                projectNodes.style("visibility", "visible");
+            } else {
+                projectNodes.style("visibility", "hidden");
+            }
+            
+            // Update links visibility based on connected nodes visibility
+            updateLinkVisibility();
+        });
+        
+        layerConnectionsCheckbox.addEventListener('change', () => {
+            if (layerConnectionsCheckbox.checked) {
+                link.style("visibility", "visible");
+                updateLinkVisibility();
+            } else {
+                link.style("visibility", "hidden");
+            }
+        });
+        
+        function updateLinkVisibility() {
+            if (!layerConnectionsCheckbox.checked) return;
+            
+            link.each(function(d) {
+                const sourceVisible = layerProjectsCheckbox.checked && d.source.group === "project" || 
+                                    layerSkillsCheckbox.checked && d.source.group === "skill";
+                                    
+                const targetVisible = layerProjectsCheckbox.checked && d.target.group === "project" || 
+                                    layerSkillsCheckbox.checked && d.target.group === "skill";
+                                    
+                d3.select(this).style("visibility", sourceVisible && targetVisible ? "visible" : "hidden");
+            });
+        }
+        
+        // Window resize handler
+        window.addEventListener('resize', () => {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+            
+            // Update SVG dimensions
+            svg.attr("width", newWidth)
+                .attr("height", newHeight);
+                
+            // Update simulation center
+            simulation.force("center", d3.forceCenter(newWidth / 2, newHeight / 2));
+            simulation.force("x", d3.forceX(newWidth / 2).strength(0.05));
+            simulation.force("y", d3.forceY(newHeight / 2).strength(0.05));
+            
+            // Restart the simulation
+            simulation.alpha(1).restart();
+        });
+        
+        // Timeline Scrubber Module
+        const TimelineScrubber = (function() {
+            // Private variables
+            let elements = {
+                startSlider: document.getElementById('timelineStartSlider'),
+                endSlider: document.getElementById('timelineEndSlider'),
+                rangeDisplay: document.getElementById('timelineRangeDisplay'),
+                selectedRange: document.getElementById('timelineSelectedRange'),
+                applyButton: document.getElementById('applyTimelineFilter'),
+                resetButton: document.getElementById('resetTimelineFilter')
+            };
+            
+            let state = {
+                startYear: parseFloat(elements.startSlider.value),
+                endYear: parseFloat(elements.endSlider.value),
+                isFilterActive: false
+            };
+            
+            // Format year values (handles quarters)
+            function formatYear(year) {
+                const wholeYear = Math.floor(year);
+                const fraction = year - wholeYear;
+                
+                if (fraction === 0) return wholeYear;
+                if (fraction === 0.25) return `${wholeYear} Q1`;
+                if (fraction === 0.5) return `${wholeYear} Q2`;
+                if (fraction === 0.75) return `${wholeYear} Q3`;
+                return `${wholeYear}`;
+            }
+            
+            // Update the timeline UI elements
+            function updateUI() {
+                const minRange = parseFloat(elements.startSlider.min);
+                const maxRange = parseFloat(elements.endSlider.max);
+                const totalRange = maxRange - minRange;
+                
+                // Calculate positions as percentages
+                const startPosition = ((state.startYear - minRange) / totalRange) * 100;
+                const endPosition = ((state.endYear - minRange) / totalRange) * 100;
+                
+                // Update the visual indicator
+                elements.selectedRange.style.left = startPosition + '%';
+                elements.selectedRange.style.width = (endPosition - startPosition) + '%';
+                
+                // Update the text display
+                elements.rangeDisplay.textContent = `${formatYear(state.startYear)} - ${formatYear(state.endYear)}`;
+            }
+            
+            // Apply project visibility based on timeline filter
+            function applyProjectFilter() {
+                const projectCards = document.querySelectorAll('[data-project-id]');
+                
+                projectCards.forEach(card => {
+                    // Get project dates
+                    const projectStart = parseFloat(card.dataset.projectStart || 0);
+                    const projectEnd = parseFloat(card.dataset.projectEnd || 9999);
+                    
+                    // Check if project date range overlaps with selected range
+                    const isInRange = (projectEnd >= state.startYear && projectStart <= state.endYear);
+                    
+                    // Set card visibility with animation
+                    setCardVisibility(card, isInRange);
+                });
+            }
+            
+            // Set card visibility with proper transitions
+            function setCardVisibility(card, isVisible) {
+                if (isVisible) {
+                    card.style.display = '';
+                    card.classList.add('active');
+                    
+                    // Apply a smooth fade-in transition
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
+                } else {
+                    card.classList.remove('active');
+                    
+                    // Apply a smooth fade-out transition
+                    card.style.opacity = '0.3';
+                    card.style.transform = 'translateY(10px)';
+                    
+                    // Hide completely after transition (for better layout)
+                    setTimeout(() => {
+                        if (!card.classList.contains('active')) {
+                            card.style.display = 'none';
+                        }
+                    }, 300);
+                }
+            }
+            
+            // Update URL parameters for filter state
+            function updateURLParameters(shouldClear = false) {
+                const urlParams = new URLSearchParams(window.location.search);
+                
+                if (shouldClear) {
+                    urlParams.delete('timelineStart');
+                    urlParams.delete('timelineEnd');
+                } else {
+                    urlParams.set('timelineStart', state.startYear);
+                    urlParams.set('timelineEnd', state.endYear);
+                }
+                
+                const newUrl = urlParams.toString().length ? 
+                    `${window.location.pathname}?${urlParams}${window.location.hash}` :
+                    `${window.location.pathname}${window.location.hash}`;
+                
+                window.history.replaceState({}, '', newUrl);
+            }
+            
+            // Reset all cards to visible state
+            function resetCardVisibility() {
+                const projectCards = document.querySelectorAll('[data-project-id]');
+                projectCards.forEach(card => {
+                    card.style.display = '';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                    card.classList.add('active');
+                });
+            }
+            
+            // Apply filter button handler
+            function handleApplyFilter() {
+                applyProjectFilter();
+                state.isFilterActive = true;
+                
+                // Update button states
+                elements.applyButton.classList.add('active');
+                elements.resetButton.classList.remove('opacity-50');
+                
+                // Update URL parameters
+                updateURLParameters();
+            }
+            
+            // Reset filter button handler
+            function handleResetFilter() {
+                // Reset sliders to default values
+                elements.startSlider.value = elements.startSlider.min;
+                elements.endSlider.value = elements.endSlider.max;
+                
+                // Update state
+                state.startYear = parseFloat(elements.startSlider.min);
+                state.endYear = parseFloat(elements.endSlider.max);
+                state.isFilterActive = false;
+                
+                // Update UI
+                updateUI();
+                resetCardVisibility();
+                
+                // Update button states
+                elements.applyButton.classList.remove('active');
+                elements.resetButton.classList.add('opacity-50');
+                
+                // Clear URL parameters
+                updateURLParameters(true);
+            }
+            
+            // Load filter state from URL parameters
+            function initializeFromURL() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('timelineStart') && urlParams.has('timelineEnd')) {
+                    const urlStartYear = parseFloat(urlParams.get('timelineStart'));
+                    const urlEndYear = parseFloat(urlParams.get('timelineEnd'));
+                    
+                    if (!isNaN(urlStartYear) && !isNaN(urlEndYear)) {
+                        // Update sliders
+                        elements.startSlider.value = urlStartYear;
+                        elements.endSlider.value = urlEndYear;
+                        
+                        // Update state
+                        state.startYear = urlStartYear;
+                        state.endYear = urlEndYear;
+                        state.isFilterActive = true;
+                        
+                        // Update UI
+                        updateUI();
+                        applyProjectFilter();
+                        
+                        // Update button states
+                        elements.applyButton.classList.add('active');
+                        elements.resetButton.classList.remove('opacity-50');
+                    }
+                }
+            }
+            
+            // Handle scroll behavior for sticky timeline
+            function setupScrollBehavior() {
+                const timelineScrubber = document.querySelector('.timeline-scrubber-section');
+                const heroSection = document.querySelector('.hero-section');
+                
+                window.addEventListener('scroll', function() {
+                    if (heroSection && timelineScrubber) {
+                        if (window.scrollY > heroSection.clientHeight) {
+                            timelineScrubber.classList.add('scrolled-past-hero');
+                        } else {
+                            timelineScrubber.classList.remove('scrolled-past-hero');
+                        }
+                    }
+                });
+            }
+            
+            // Public methods
+            return {
+                init: function() {
+                    // Set up event listeners
+                    elements.startSlider.addEventListener('input', function() {
+                        state.startYear = parseFloat(this.value);
+                        
+                        // Ensure start doesn't exceed end
+                        if (state.startYear > state.endYear) {
+                            state.endYear = state.startYear;
+                            elements.endSlider.value = state.startYear;
+                        }
+                        
+                        updateUI();
+                    });
+                    
+                    elements.endSlider.addEventListener('input', function() {
+                        state.endYear = parseFloat(this.value);
+                        
+                        // Ensure end doesn't go below start
+                        if (state.endYear < state.startYear) {
+                            state.startYear = state.endYear;
+                            elements.startSlider.value = state.endYear;
+                        }
+                        
+                        updateUI();
+                    });
+                    
+                    elements.applyButton.addEventListener('click', handleApplyFilter);
+                    elements.resetButton.addEventListener('click', handleResetFilter);
+                    
+                    // Initialize UI
+                    updateUI();
+                    
+                    // Setup scroll behavior
+                    setupScrollBehavior();
+                    
+    </footer>
+    
+    <!-- Modular JavaScript imports -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

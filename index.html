@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sulayman Bowles - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- Modularized CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/panels.css">
+    <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="css/modal.css">
+</head>
+<body class="antialiased">
+    <!-- Left Context Panel -->
+    <div class="context-panel panel-left" id="leftPanel">
+        <div class="panel-header">
+            <h3 class="panel-title">Project Details</h3>
+            <div class="panel-close" id="closeLeftPanel"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="panel-content">
+            <div class="panel-section">
+                <h4 class="panel-section-title">Overview</h4>
+                <div id="panelProjectOverview"></div>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Metadata</h4>
+                <div class="metadata-list">
+                    <div class="metadata-item">
+                        <span class="metadata-label">Timeline:</span>
+                        <span class="metadata-value" id="panelProjectTimeline">2024-2025</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Category:</span>
+                        <span class="metadata-value" id="panelProjectCategory">Finance</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Status:</span>
+                        <span class="metadata-value" id="panelProjectStatus">Completed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Key Accomplishments</h4>
+                <ul class="panel-list" id="panelProjectAccomplishments">
+                    <!-- Will be populated dynamically -->
+                </ul>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Related Projects</h4>
+                <div class="related-items" id="panelRelatedProjects">
+                    <!-- Will be populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Context Panel -->
+    <div class="context-panel panel-right" id="rightPanel">
+        <div class="panel-header">
+            <h3 class="panel-title">Filters & Details</h3>
+            <div class="panel-close" id="closeRightPanel"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="panel-content">
+            <div class="panel-section">
+                <h4 class="panel-section-title">Filter Projects</h4>
+                <div class="filter-group">
+                    <div class="filter-title">By Category</div>
+                    <div class="filter-chips">
+                        <div class="filter-chip" data-filter="category" data-value="finance">Finance</div>
+                        <div class="filter-chip" data-filter="category" data-value="blockchain">Blockchain</div>
+                        <div class="filter-chip" data-filter="category" data-value="trading">Trading</div>
+                        <div class="filter-chip" data-filter="category" data-value="research">Research</div>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-title">By Status</div>
+                    <div class="filter-chips">
+                        <div class="filter-chip" data-filter="status" data-value="completed">Completed</div>
+                        <div class="filter-chip" data-filter="status" data-value="ongoing">Ongoing</div>
+                        <div class="filter-chip" data-filter="status" data-value="planned">Planned</div>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-title">By Skills</div>
+                    <div class="filter-chips">
+                        <div class="filter-chip" data-filter="skill" data-value="python">Python</div>
+                        <div class="filter-chip" data-filter="skill" data-value="blockchain">Blockchain</div>
+                        <div class="filter-chip" data-filter="skill" data-value="modeling">Financial Modeling</div>
+                        <div class="filter-chip" data-filter="skill" data-value="analysis">Data Analysis</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h4 class="panel-section-title">Selected Skill Details</h4>
+                <div id="skillDetailContent">
+                    <!-- Will be populated when a skill is selected -->
+                    <p class="text-sm text-gray-400">Select a skill to view details</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop for when panels are open -->
+    <div class="content-backdrop" id="contentBackdrop"></div>
+
+    <div class="main-content">
+        <nav id="navbar" class="shadow-lg">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#" class="flex items-center py-4 px-2">
+                            <span class="font-semibold text-gray-100 text-lg hover:text-white transition duration-300 tracking-wider">SULAYMAN BOWLES</span>
+                        </a>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="#about" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            About <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="#projects" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            Projects <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="#skills" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            Skills <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="#contact" class="py-5 px-3 text-gray-400 hover:text-gray-100 font-medium relative group text-sm">
+                            Contact <span class="nav-link-indicator"></span>
+                        </a>
+                        <a href="https://linkedin.com/in/sulayman-bowles" target="_blank" class="nav-resume-btn ml-2 py-2 px-3 font-semibold rounded-sm shadow-md text-xs uppercase tracking-wider">
+                            Resume
+                        </a>
+                    </div>
+                    <div class="md:hidden flex items-center">
+                        <button class="outline-none mobile-menu-button p-2 rounded-md text-gray-400 hover:text-gray-200 hover:bg-gray-700">
+                            <svg class="w-6 h-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden mobile-menu">
+                <ul class="pt-2 pb-3 space-y-1 sm:px-3">
+                    <li><a href="#about" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">About</a></li>
+                    <li><a href="#projects" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">Projects</a></li>
+                    <li><a href="#skills" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">Skills</a></li>
+                    <li><a href="#contact" class="block text-sm px-3 py-2 rounded-md text-gray-200 hover:bg-gray-600 hover:text-white transition duration-150 ease-in-out">Contact</a></li>
+                    <li><a href="https://linkedin.com/in/sulayman-bowles" target="_blank" class="nav-resume-btn block text-sm px-3 py-2 mt-1 mx-2 font-semibold rounded-sm shadow-md text-center transition duration-150 ease-in-out uppercase tracking-wider">Resume</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    <section class="hero-section">
+        <div id="network-visualization"></div>
+        <div id="particles-js" class="particles-container"></div>
+        <div class="hero-content px-4">
+            <h1 class="hero-title revealable">SULAYMAN BOWLES</h1>
+            <p class="hero-subtitle revealable" style="transition-delay: 0.2s;">OPERATING AT THE NEXUS OF FINANCE, TECHNOLOGY & STRATEGIC INSIGHT.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+                <a href="#projects" class="btn-primary revealable" style="transition-delay: 0.4s;">Explore Initiatives</a>
+                <div class="flex items-center gap-2 revealable" style="transition-delay: 0.5s;">
+                    <button id="toggleVisLayout" class="btn-secondary text-xs py-1.5 px-3">
+                        <i class="fas fa-project-diagram mr-1"></i> Toggle View
+                    </button>
+                    <div class="relative inline-block">
+                        <button id="visLayersBtn" class="btn-secondary text-xs py-1.5 px-3">
+                            <i class="fas fa-layer-group mr-1"></i> Layers
+                        </button>
+                        <div id="layersDropdown" class="absolute right-0 mt-2 py-2 w-48 bg-gray-800 rounded-md shadow-xl z-50 hidden">
+                            <div class="px-4 py-2 border-b border-gray-700">
+                                <p class="text-xs text-gray-500 uppercase mb-1">Visible Elements</p>
+                                <div class="flex items-center mb-1">
+                                    <input type="checkbox" class="form-checkbox text-blue-500" checked id="layerSkills">
+                                    <span class="ml-2 text-gray-300">Skills</span>
+                                </div>
+                                <div class="flex items-center mb-1">
+                                    <input type="checkbox" class="form-checkbox text-blue-500" checked id="layerProjects">
+                                    <span class="ml-2 text-gray-300">Projects</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" class="form-checkbox text-blue-500" checked id="layerConnections">
+                                    <span class="ml-2 text-gray-300">Connections</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-scrubber-section">
+        <div class="max-w-6xl mx-auto px-4 py-4 relative">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-gray-300 text-sm font-semibold">TIMELINE FILTER</h3>
+                <span id="timelineRangeDisplay" class="text-gray-400 text-xs">2018 - 2024</span>
+            </div>
+            <div class="timeline-container relative">
+                <div class="timeline-track h-1 bg-gray-700 rounded-full relative overflow-hidden">
+                    <div id="timelineSelectedRange" class="absolute h-full bg-blue-400 left-0"></div>
+                </div>
+                <div class="timeline-markers flex justify-between relative -mt-2.5">
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2018</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2019</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2020</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2021</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2022</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2023</span>
+                    </div>
+                    <div class="timeline-marker">
+                        <div class="h-3 w-0.5 bg-gray-600"></div>
+                        <span class="text-xs text-gray-500 mt-1 block">2024</span>
+                    </div>
+                </div>
+                <div class="timeline-handles mt-2 relative">
+                    <input type="range" id="timelineStartSlider" min="2018" max="2024" step="0.25" value="2018" 
+                           class="timeline-slider absolute w-full appearance-none bg-transparent pointer-events-none">
+                    <input type="range" id="timelineEndSlider" min="2018" max="2024" step="0.25" value="2024" 
+                           class="timeline-slider absolute w-full appearance-none bg-transparent pointer-events-none">
+                </div>
+            </div>
+            <div class="flex justify-end mt-3">
+                <button id="applyTimelineFilter" class="btn-secondary text-xs py-1 px-2">
+                    <i class="fas fa-filter mr-1"></i> Apply Filter
+                </button>
+                <button id="resetTimelineFilter" class="btn-secondary text-xs py-1 px-2 ml-2 opacity-50">
+                    <i class="fas fa-undo mr-1"></i> Reset
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="section-title-container revealable">
+            <h2 class="section-title">ANALYST & INNOVATOR</h2>
+        </div>
+        <div class="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
+            <div class="md:col-span-4 revealable">
+                 <img src="https://placehold.co/600x750/24282b/d8d8d8?text=S.B." alt="Sulayman Bowles" class="rounded-md shadow-2xl mx-auto border-2 border-gray-700" onerror="this.onerror=null;this.src='https://placehold.co/600x750/1e2124/767676?text=Image+Error';">
+            </div>
+            <div class="md:col-span-8 text-base leading-relaxed revealable" style="color: var(--theme-text-medium); transition-delay: 0.2s;">
+                <p class="mb-4">
+                    I am Sulayman Bowles, pursuing a Bachelor of Arts in Music at the University of Texas at Austin (Expected May 2028, GPA: 3.82). My focus is on the complex interplay within financial markets, technological systems, and musical structures.
+                </p>
+                <p class="mb-4">
+                    Key experiences include co-founding a VC-backed <strong class="text-accent">blockchain project (Bittensor protocol)</strong>, securing a DormDAO grant, and serving as an Investment Team Analyst at <strong class="text-accent">Texas Blockchain</strong>. I've also contributed to commercial real estate through pro forma modeling and database redesign at Investors Alliance, Inc.
+                </p>
+                <p class="mb-4">
+                    My skill set encompasses market analysis, financial modeling, and strategic advisory, with a strong interest in algorithmic trading, stablecoin research, and data visualization.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="section" style="background-color: #1c1f22;">
+        <div class="section-title-container revealable">
+             <h2 class="section-title">KEY INITIATIVES & ANALYSES</h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="card flex flex-col justify-between revealable" data-project-id="bittensor" data-project-start="2022.5" data-project-end="2024">
+                <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Bittensor+Project" alt="VC-Backed Bittensor Project" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">VC-Backed Bittensor Project</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Co-founded and architected a blockchain project on Bittensor. Secured $10K grant (DormDAO), managed governance and technicals.</p>
+                </div>
+                <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Details (NDA)</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.1s;" data-project-id="cryptoDD" data-project-start="2021" data-project-end="2023">
+                <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Crypto+DD" alt="Texas Blockchain" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Crypto Due Diligence</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Analyst for Texas Blockchain ($120K AUM). Due diligence on 10+ cryptoassets, risk/valuation summaries. Pitched $5K-$8K allocations.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Case Studies</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.2s;" data-project-id="imcTrading" data-project-start="2022" data-project-end="2023">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Algo+Trading" alt="IMC Trading Challenge" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">IMC Prosperity Trading Challenge</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Devised algorithmic/discretionary strategies in global market simulations. Focused on quantitative approaches.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Strategy Insights</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.3s;" data-project-id="stablecoinResearch" data-project-start="2020" data-project-end="2021.5">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Stablecoin+Research" alt="Messari Stablecoin Research" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Messari Stablecoin Research</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">In-depth research on stablecoin mechanisms/market trends. Automated data-monitoring workflows for reporting efficiency.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">View Research</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.4s;" data-project-id="creModeling" data-project-start="2018.5" data-project-end="2020">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=CRE+Modeling" alt="Commercial Real Estate Internship" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Commercial Real Estate Analysis</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Developed pro forma models and redesigned portfolio database at Investors Alliance. Streamlined financial reporting processes.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">Project Details</button></div>
+            </div>
+            <div class="card flex flex-col justify-between revealable" style="transition-delay: 0.5s;" data-project-id="energyTrading" data-project-start="2019" data-project-end="2020.5">
+                 <div>
+                    <img src="https://placehold.co/600x350/1e2124/767676?text=Energy+Trading" alt="Energy Markets Study" class="rounded-sm mb-3 w-full h-40 object-cover project-image" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1e2124/d8d8d8?text=Error';">
+                    <h3 class="text-lg font-semibold mb-1.5 project-title">Energy Markets Study</h3>
+                    <p class="mb-2.5 text-xs leading-relaxed project-summary">Researched volatility patterns in energy markets. Built statistical model to predict price movements based on supply/demand indicators.</p>
+                </div>
+                 <div class="mt-auto"><button class="btn-secondary w-full text-center block project-details-btn">View Analysis</button></div>
+            </div>
+        </div>
+    </section>
