@@ -1,0 +1,79 @@
+/* Network visualization specific styles */
+
+/* Node styles */
+#network-visualization circle {
+    cursor: pointer;
+    transition: stroke-width 0.2s ease, filter 0.3s ease;
+}
+
+#network-visualization circle:hover {
+    stroke-width: 2px;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+}
+
+#network-visualization circle.dragging {
+    stroke: #58a6ff !important;
+    stroke-width: 2.5px !important;
+    filter: drop-shadow(0 0 4px rgba(88, 166, 255, 0.7)) !important;
+}
+
+/* Link styles */
+#network-visualization line {
+    stroke-opacity: 0.6;
+    transition: stroke-opacity 0.3s ease;
+}
+
+#network-visualization line.highlighted {
+    stroke-opacity: 0.9 !important;
+    stroke-width: 1.5px !important;
+}
+
+/* Text styles */
+#network-visualization text {
+    font-size: 10px;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, font-size 0.3s ease;
+}
+
+#network-visualization text.highlighted {
+    opacity: 1;
+    font-size: 11px;
+}
+
+/* Prevent interaction with text labels */
+#network-visualization text {
+    pointer-events: none;
+}
+
+/* Ensure right z-index and pointer events */
+#network-visualization {
+    position: absolute !important;
+    z-index: 5 !important;
+    pointer-events: all !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    opacity: 1 !important;
+}
+
+/* Make sure the visualization container doesn't block other interactions */
+.interactive-layer {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none; /* Let events pass through by default */
+    z-index: 5 !important;
+    display: block !important;
+}
+
+/* But allow events on the SVG elements */
+.interactive-layer > svg,
+.interactive-layer > svg * {
+    pointer-events: auto;
+}

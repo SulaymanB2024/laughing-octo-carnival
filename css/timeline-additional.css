@@ -1,0 +1,95 @@
+/* 
+ * Timeline Slider Additional Fixes
+ * These styles ensure better timeline functionality and visual appearance
+ */
+
+/* Make sure sliders are fully interactive */
+.timeline-slider {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+}
+
+/* Ensure consistent position of timeline when fixed */
+.timeline-fixed {
+    position: fixed !important;
+    top: var(--header-height, 64px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+}
+
+/* Better visibility for slider thumbs */
+.timeline-slider::-webkit-slider-thumb {
+    box-shadow: 0 0 0 2px var(--theme-dark), 0 0 0 4px rgba(255, 255, 255, 0.2);
+    width: 20px;
+    height: 20px;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.timeline-slider::-moz-range-thumb {
+    box-shadow: 0 0 0 2px var(--theme-dark), 0 0 0 4px rgba(255, 255, 255, 0.2);
+    width: 20px;
+    height: 20px;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Active state for sliders */
+.timeline-slider:active::-webkit-slider-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 2px var(--theme-dark), 0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+.timeline-slider:active::-moz-range-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 2px var(--theme-dark), 0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+/* Timeline dragging state */
+body.timeline-dragging * {
+    cursor: grabbing !important;
+}
+
+/* Timeline hover state */
+body.timeline-slider-hover .timeline-track {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced button states */
+#applyTimelineFilter.hover,
+#resetTimelineFilter.hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#applyTimelineFilter.active,
+#resetTimelineFilter.active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Make timeline section more prominent */
+.timeline-enhanced {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Timeline container sizing */
+.timeline-container {
+    padding: 8px 15px;
+    height: auto;
+    min-height: 50px;
+}
+
+/* Ensure the track is clickable */
+.timeline-track {
+    cursor: pointer;
+    position: relative;
+}
+
+/* Make time markers more visible */
+.timeline-marker {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}

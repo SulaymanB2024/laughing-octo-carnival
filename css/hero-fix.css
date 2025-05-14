@@ -1,0 +1,64 @@
+/* 
+ * Enhanced Hero Content CSS
+ * These styles provide additional fixes for hero title positioning
+ */
+
+/* Prevent any transforms on hero title */
+.hero-title {
+    transform: none !important;
+    transform-origin: center center !important;
+    transition: none !important;
+    animation: none !important;
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    display: block !important;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    float: none !important;
+}
+
+/* Fix hero content container */
+.hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    z-index: 10 !important;
+    max-width: 800px !important;
+    width: 100% !important;
+    padding: 2rem !important;
+    margin: 0 auto !important;
+    transform: none !important;
+    text-align: center !important;
+}
+
+/* Special handling for the hero container */
+.hero-section {
+    transform-style: flat !important;
+    perspective: none !important;
+    transform: none !important;
+    position: relative !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+/* Enhanced revealable with no transform */
+.revealable.hero-no-transform {
+    transform: none !important;
+    opacity: 1 !important;
+    position: static !important;
+}
+
+/* Make sure particle and network layers stay in place */
+#particles-js,
+#network-visualization {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}

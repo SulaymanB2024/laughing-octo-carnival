@@ -340,18 +340,15 @@ export class ParticlesBackground {
     /**
      * Initialize particles background
      * @param {string} [theme] - Optional theme name ('dark', 'light', 'blue', etc.)
-     * @returns {Promise<boolean>} Success status as a promise
+     * @returns {boolean} Success status
      */
-    async init(theme = null) {
+    init(theme = null) {
         // Check if particles.js is loaded
         if (typeof particlesJS !== 'function') {
             console.error('particles.js is not loaded. Please include particles.js library.');
             return false;
         }
         
-        // Preload particles resources and wait for them to load
-        await this._preloadParticlesResources();
-
         // Save theme choice
         this.activeTheme = theme || Object.keys(this.themes)[0];
         
@@ -359,21 +356,9 @@ export class ParticlesBackground {
         const config = this._getConfiguration(this.activeTheme);
         
         try {
-            // Prepare container
-            const container = document.getElementById(this.containerId);
-            if (container) {
-                container.style.opacity = '0';
-                container.style.transition = 'opacity 0.5s ease-in-out';
-            }
-            
             // Initialize particles.js with configuration
             this.instance = particlesJS(this.containerId, config);
             this.isRunning = true;
-            
-            // Fade in the particles container
-            setTimeout(() => {
-                if (container) container.style.opacity = '1';
-            }, 100);
             
             // Store original canvas size for later use
             const canvas = document.querySelector(`#${this.containerId} canvas`);
@@ -716,59 +701,6 @@ export class ParticlesBackground {
     }
     
     /**
-     * Preload particles resources to prevent flicker on initialization
-     * @private
-     */
-    _preloadParticlesResources() {
-        return new Promise((resolve) => {
-            // Create a hidden div to preload needed resources
-            const preloadDiv = document.createElement('div');
-            preloadDiv.style.position = 'absolute';
-            preloadDiv.style.width = '0';
-            preloadDiv.style.height = '0';
-            preloadDiv.style.overflow = 'hidden';
-            preloadDiv.style.visibility = 'hidden';
-            preloadDiv.style.opacity = '0';
-            
-            // Add a small particles container to preload scripts
-            preloadDiv.innerHTML = '<div id="preload-particles-container" style="width:1px;height:1px;"></div>';
-            document.body.appendChild(preloadDiv);
-            
-            // Set up cursor customization for particles
-            this._setupCursorHandling();
-            
-            // Force the browser to load resources ahead of time
-            if (typeof particlesJS === 'function') {
-                try {
-                    const minConfig = {
-                        particles: {
-                            number: { value: 1 },
-                            opacity: { value: 0 }
-                        }
-                    };
-                    particlesJS('preload-particles-container', minConfig);
-                    
-                    // Clean up after resources are loaded
-                    setTimeout(() => {
-                        if (document.body.contains(preloadDiv)) {
-                            document.body.removeChild(preloadDiv);
-                        }
-                        resolve();
-                    }, 500);
-                } catch (e) {
-                    // Silently handle any errors during preloading
-                    if (document.body.contains(preloadDiv)) {
-                        document.body.removeChild(preloadDiv);
-                    }
-                    resolve();
-                }
-            } else {
-                resolve();
-            }
-        });
-    }
-    
-    /**
      * Register custom shape renderers
      * @private
      */
@@ -962,7 +894,7 @@ export class ParticlesBackground {
                 }
             },
             interactivity: {
-                detect_on: "window", /* Changed from canvas to window for better interaction */
+                detect_on: "canvas",
                 events: {
                     onhover: {
                         enable: true,
@@ -1121,37 +1053,5 @@ export class ParticlesBackground {
         if (theme && this.themes[theme]) {
             this.changeTheme(theme);
         }
-    }
-    
-    /**
-     * Set up proper cursor handling for particles interactions
-     * @private
-     */
-    _setupCursorHandling() {
-        // Get the container element
-        const container = document.getElementById(this.containerId);
-        if (!container) return;
-        
-        // Add event listeners for cursor handling
-        container.addEventListener('mouseover', () => {
-            // Only set cursor if no other interactive elements are being hovered
-            if (document.querySelectorAll(':hover[data-interactive="true"]').length === 0) {
-                // We use default cursor for particles background
-                document.body.style.cursor = 'default';
-            }
-        });
-        
-        // Handle canvas-specific events when created
-        setTimeout(() => {
-            const canvas = document.querySelector(`#${this.containerId} canvas`);
-            if (canvas) {
-                canvas.style.cursor = 'default'; 
-                
-                // Listen for cursor-change events and don't interfere with them
-                canvas.addEventListener('cursor-change', (e) => {
-                    e.stopPropagation();
-                });
-            }
-        }, 500);
     }
 }

@@ -126,11 +126,13 @@ export class NetworkVisualization {
      * Create the D3.js visualization
      */
     createVisualization() {
-        // Create SVG element
+        // Create SVG element with proper cursor attributes
         this.svg = d3.select(`#${this.containerId}`)
             .append("svg")
             .attr("width", this.width)
-            .attr("height", this.height);
+            .attr("height", this.height)
+            .attr("class", "visualization-svg")
+            .style("cursor", "default"); // Set default cursor
             
         // Create group for zooming
         this.g = this.svg.append("g");
@@ -161,7 +163,7 @@ export class NetworkVisualization {
             .attr("stroke", "#4F5458")
             .attr("opacity", 0.5);
             
-        // Create nodes
+        // Create nodes with enhanced interactive properties
         this.node = this.g.append("g")
             .attr("class", "nodes")
             .selectAll("circle")
@@ -172,6 +174,8 @@ export class NetworkVisualization {
             .attr("fill", d => d.group === "project" ? "#00BCD4" : "#FF6D00")
             .attr("stroke", "#191f27")
             .attr("stroke-width", 1.5)
+            .style("cursor", "pointer") // Set pointer cursor explicitly
+            .attr("data-interactive", "true") // Mark as interactive for cursor manager
             .call(this.drag());
             
         // Add labels to nodes
@@ -206,20 +210,42 @@ export class NetworkVisualization {
      */
     drag() {
         const dragstarted = (event, d) => {
+            // Add class to the dragged node for visual feedback
+            d3.select(event.sourceEvent.target).classed("dragging", true);
+            
             if (!event.active) this.simulation.alphaTarget(0.3).restart();
             d.fx = d.x;
             d.fy = d.y;
+            
+            // Emit an event that cursor manager can listen to
+            document.dispatchEvent(new CustomEvent('cursor-change', { 
+                detail: { type: 'grabbing' } 
+            }));
         };
         
         const dragged = (event, d) => {
-            d.fx = event.x;
-            d.fy = event.y;
+            // Apply some damping effect for smoother movement
+            const damping = 1.0;  // 1.0 = no damping, lower = more damping
+            d.fx = event.x * damping + d.fx * (1-damping);
+            d.fy = event.y * damping + d.fy * (1-damping);
         };
         
         const dragended = (event, d) => {
+            // Remove visual feedback
+            d3.select(event.sourceEvent.target).classed("dragging", false);
+            
             if (!event.active) this.simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
+            
+            // Add a slight transition before releasing the fixed position
+            setTimeout(() => {
+                d.fx = null;
+                d.fy = null;
+            }, 100);
+            
+            // Reset cursor
+            document.dispatchEvent(new CustomEvent('cursor-change', { 
+                detail: { type: 'default' } 
+            }));
         };
         
         return d3.drag()
@@ -232,10 +258,15 @@ export class NetworkVisualization {
      * Setup node hover and click interactions
      */
     setupNodeInteractions() {
-        this.node.on("mouseover", (event, d) => {
+        // Use data-cursor attribute for consistent cursor management
+        this.node
+        .attr("data-cursor", "pointer")
+        .style("cursor", "pointer")
+        .on("mouseover", (event, d) => {
             d3.select(event.currentTarget)
                 .attr("stroke", "#d8d8d8")
-                .attr("stroke-width", 2);
+                .attr("stroke-width", 2)
+                .style("filter", "drop-shadow(0 0 3px rgba(216, 216, 216, 0.7))");
                 
             // Highlight connected links
             this.link
@@ -253,11 +284,22 @@ export class NetworkVisualization {
                 .style("opacity", l => 
                     l.id === d.id ? 1 : 0
                 );
+                
+            // Let the cursor manager handle cursor style
+            // No direct manipulation of document.body.style.cursor here
+            
+            // Dispatch custom event for cursor manager to handle
+            const cursorEvent = new CustomEvent('cursor-change', { 
+                detail: { type: 'pointer' },
+                bubbles: true 
+            });
+            event.currentTarget.dispatchEvent(cursorEvent);
         })
         .on("mouseout", (event) => {
             d3.select(event.currentTarget)
                 .attr("stroke", "#191f27")
-                .attr("stroke-width", 1.5);
+                .attr("stroke-width", 1.5)
+                .style("filter", "none");
                 
             // Reset link styles
             this.link
@@ -266,8 +308,24 @@ export class NetworkVisualization {
                 
             // Hide labels
             this.label.style("opacity", 0);
+            
+            // Let cursor manager handle cursor reset
+            // No direct manipulation of document.body.style.cursor here
         })
         .on("click", (event, d) => {
+            // Create ripple effect on click
+            const circle = event.currentTarget;
+            const r = parseFloat(circle.getAttribute("r"));
+            
+            // Pulse animation for feedback
+            d3.select(circle)
+                .transition()
+                .duration(200)
+                .attr("r", r * 1.5)
+                .transition()
+                .duration(200)
+                .attr("r", r);
+            
             // Find corresponding DOM element to trigger action
             if (d.group === "project") {
                 const projectCards = document.querySelectorAll('.card[data-project-id]');

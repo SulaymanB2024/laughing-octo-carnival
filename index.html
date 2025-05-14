@@ -14,7 +14,15 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/panels.css">
     <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="css/timeline-fix.css">
+    <link rel="stylesheet" href="css/timeline-additional.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/network.css">
+    <link rel="stylesheet" href="css/hero-fix.css">
+    
+    <!-- Critical fixes -->
+    <script src="js/modules/network-fix.js"></script>
+    <script src="js/modules/hero-fix.js"></script>
 </head>
 <body class="antialiased">
     <!-- Left Context Panel -->
@@ -160,14 +168,17 @@
         </nav>
 
     <section class="hero-section">
-        <div id="network-visualization"></div>
-        <div id="particles-js" class="particles-container"></div>
+        <div id="network-visualization" class="interactive-layer"></div>
+        <div id="particles-js" class="particles-container loading"></div>
         <div class="hero-content px-4">
-            <h1 class="hero-title revealable">SULAYMAN BOWLES</h1>
-            <p class="hero-subtitle revealable" style="transition-delay: 0.2s;">OPERATING AT THE NEXUS OF FINANCE, TECHNOLOGY & STRATEGIC INSIGHT.</p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-                <a href="#projects" class="btn-primary revealable" style="transition-delay: 0.4s;">Explore Initiatives</a>
-                <div class="flex items-center gap-2 revealable" style="transition-delay: 0.5s;">
+            <h1 class="hero-title revealable hero-no-transform revealed">SULAYMAN BOWLES</h1>
+            <p class="hero-subtitle revealable hero-no-transform revealed" style="transition-delay: 0.2s;">OPERATING AT THE NEXUS OF FINANCE, TECHNOLOGY & STRATEGIC INSIGHT.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mt-10">
+                <a href="#projects" class="btn-primary revealable hero-cta animate-pulse" style="transition-delay: 0.4s; animation: pulse 2s infinite;">
+                    <span class="relative z-10">Explore Initiatives</span>
+                    <span class="absolute inset-0 bg-white bg-opacity-20 rounded-md transform scale-105 -z-10 blur-sm"></span>
+                </a>
+                <div class="flex items-center gap-3 revealable" style="transition-delay: 0.5s;">
                     <button id="toggleVisLayout" class="btn-secondary text-xs py-1.5 px-3">
                         <i class="fas fa-project-diagram mr-1"></i> Toggle View
                     </button>
@@ -445,5 +456,7 @@
 
   <!-- Import modularized JavaScript -->
   <script type="module" src="js/main.js"></script>
+  <!-- Auto-diagnostic script to ensure everything is working properly -->
+  <script type="module" src="js/modules/auto-diagnostic.js"></script>
 </body>
 </html>

@@ -10,22 +10,23 @@ export class RevealAnimation {
     
     /**
      * Initialize reveal animations
+     * @param {ScrollManager} scrollManager - The central scroll manager
      */
-    init() {
+    init(scrollManager) {
         if (this.revealItems.length === 0) return;
         
         // Initial check on page load
         this.checkReveal();
         
-        // Check on scroll
-        window.addEventListener('scroll', () => {
-            this.checkReveal();
-        });
-        
-        // Check on resize (in case reveal thresholds change)
-        window.addEventListener('resize', () => {
-            this.checkReveal();
-        });
+        // Use scroll manager if available
+        if (scrollManager) {
+            scrollManager.onScroll(this.checkReveal, this);
+            scrollManager.onResize(this.checkReveal, this);
+        } else {
+            // Fallback to direct event listeners
+            window.addEventListener('scroll', () => this.checkReveal());
+            window.addEventListener('resize', () => this.checkReveal());
+        }
     }
     
     /**
@@ -37,6 +38,18 @@ export class RevealAnimation {
         this.revealItems.forEach(item => {
             // Skip already revealed items
             if (this.revealed.has(item)) return;
+            
+            // Special handling for hero-section elements to prevent position shifting
+            const isHeroElement = item.closest('.hero-section') !== null;
+            if (isHeroElement) {
+                // Immediately reveal hero elements with special class to prevent transform
+                item.classList.add('hero-no-transform');
+                setTimeout(() => {
+                    item.classList.add('revealed');
+                    this.revealed.add(item);
+                }, 10); // Small delay to ensure hero-no-transform is applied first
+                return;
+            }
             
             const itemTop = item.getBoundingClientRect().top;
             const revealOffset = 50; // Pixels from bottom of viewport to trigger reveal

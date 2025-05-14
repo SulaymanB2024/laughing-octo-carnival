@@ -233,17 +233,63 @@ export class TimelineScrubber {
     
     /**
      * Handle scroll behavior for sticky timeline
+     * Improved scroll behavior with smoother transitions and better performance
      */
     setupScrollBehavior() {
         if (!this.elements.timelineScrubber || !this.elements.heroSection) return;
         
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > this.elements.heroSection.clientHeight) {
-                this.elements.timelineScrubber.classList.add('scrolled-past-hero');
+        // Track scroll direction
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+        let scrollTimeout = null;
+        
+        // Use requestAnimationFrame for better scroll performance
+        const handleScroll = () => {
+            // Get hero section height with a small buffer for smoother transition
+            const heroHeight = this.elements.heroSection.clientHeight - 20;
+            const scrollY = window.scrollY;
+            const scrollingDown = scrollY > lastScrollY;
+            const headerHeight = 64; // Estimated header height
+            
+            if (scrollY > heroHeight - headerHeight) {
+                // When scrolled past hero section
+                this.elements.timelineScrubber.classList.add('timeline-fixed');
+                
+                // More responsive timeline behavior
+                if (scrollingDown) {
+                    // Only hide on mobile and when scrolling significantly
+                    if (window.innerWidth < 1024 && (scrollY - lastScrollY > 10)) {
+                        this.elements.timelineScrubber.classList.add('scrolled-past-hero');
+                    }
+                } else {
+                    // Show when scrolling up
+                    this.elements.timelineScrubber.classList.remove('scrolled-past-hero');
+                }
+                
+                // Always show after scrolling stops
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    this.elements.timelineScrubber.classList.remove('scrolled-past-hero');
+                }, 800);
             } else {
+                // When at hero section, show timeline normally
                 this.elements.timelineScrubber.classList.remove('scrolled-past-hero');
+                this.elements.timelineScrubber.classList.remove('timeline-fixed');
+            }
+            
+            lastScrollY = scrollY;
+            ticking = false;
+        };
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(handleScroll);
+                ticking = true;
             }
         });
+        
+        // Initial check in case page loads scrolled down
+        handleScroll();
     }
     
     /**
